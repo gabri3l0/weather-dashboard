@@ -1,8 +1,8 @@
-import {Button, CustomListItem, FlexBox, FlexBoxAlignItems, List, Text} from "@ui5/webcomponents-react";
-import deleteIcon from '@ui5/webcomponents-icons/dist/delete.js';
+import {List} from "@ui5/webcomponents-react";
 import {useState} from "react";
+import {SavedLocationItem} from "./SavedLocationItem.tsx";
 
-type LocationType = {
+export type LocationType = {
     id: string,
     city: string,
     country: string,
@@ -10,10 +10,10 @@ type LocationType = {
     low: string,
     high: string,
 }
-export function SavedSavedLocationList() {
+export function SavedLocationList() {
     const [locationList, setLocationList] = useState<Array<LocationType>>([
         {
-            id: "1",
+            id: "12",
             city: "Monterrey",
             country: 'MX',
             temp: '23C',
@@ -21,7 +21,7 @@ export function SavedSavedLocationList() {
             high: '25C',
         },
         {
-            id: "2",
+            id: "22",
             city: "Monterrey",
             country: 'MX',
             temp: '23C',
@@ -29,7 +29,7 @@ export function SavedSavedLocationList() {
             high: '25C',
         },
         {
-            id: "3",
+            id: "33",
             city: "Monterrey",
             country: 'MX',
             temp: '23C',
@@ -37,7 +37,7 @@ export function SavedSavedLocationList() {
             high: '25C',
         }
         ,        {
-            id: "4",
+            id: "45",
             city: "Monterrey",
             country: 'MX',
             temp: '23C',
@@ -46,8 +46,12 @@ export function SavedSavedLocationList() {
         }
     ])
 
+    const handleItemClick = (location: LocationType) => {
+        console.log(`search location`, location)
+    }
+
     // TODO review typo
-    const handleClick = (e: any) => {
+    const handleDelete = (e: any) => {
         setLocationList(locationList.filter((location)=> location.id !== e.target.id))
     }
 
@@ -58,50 +62,12 @@ export function SavedSavedLocationList() {
             >
                 {locationList.map((location)=> {
                     return (
-                        <CustomListItem key={location.id}>
-                            <FlexBox
-                                justifyContent="SpaceAround"
-                                alignItems={FlexBoxAlignItems.Center}
-                                style={{
-                                    width: '100%'
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        fontWeight: 'bold'
-                                    }}
-                                >
-                                    {location.city}, {location.country}
-                                </Text>
-                                <Text
-                                    style={{
-                                        fontWeight: 'bold'
-                                    }}
-                                >
-                                    {location.id}
-                                </Text>
-                                <Text
-                                    style={{
-                                        fontWeight: 'bold'
-                                    }}
-                                >
-                                    ICON
-                                </Text>
-                                <Text
-                                    style={{
-                                        fontWeight: 'bold'
-                                    }}
-                                >
-                                    L:{location.low}, H: {location.high}
-                                </Text>
-                                <Button
-                                    id={location.id}
-                                    design="Negative"
-                                    icon={deleteIcon}
-                                    onClick={handleClick}
-                                />
-                            </FlexBox>
-                        </CustomListItem>
+                       <>
+                           <SavedLocationItem
+                               location={location}
+                               handleDelete={handleDelete}
+                               handleItemClick={handleItemClick}/>
+                       </>
                     )
                 })}
             </List>
