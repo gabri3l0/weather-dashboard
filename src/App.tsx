@@ -1,17 +1,18 @@
-import employeeIcon from '@ui5/webcomponents-icons/dist/employee.js';
+import actionSettingsIcon from '@ui5/webcomponents-icons/dist/action-settings.js';
 import { Avatar, ShellBar } from '@ui5/webcomponents-react';
+
 function App() {
   return (
     <>
       <ShellBar
         logo={
           <img
-            src="https://raw.githubusercontent.com/SAP/ui5-webcomponents-react/main/assets/ui5-logo.svg"
-            alt={'UI5 Web Components for React logo'}
+            src="https://experience.sap.com/fiori-design-web/wp-content/themes/guidelines/assets/sap.png"
+            alt={'SAP Logo'}
           />
         }
-        primaryTitle="UI5 Web Components for React Template"
-        profile={<Avatar icon={employeeIcon} />}
+        primaryTitle="Weather Dashboard"
+        profile={<Avatar icon={actionSettingsIcon} />}
       />
       {/* Add your code here */}
     </>
