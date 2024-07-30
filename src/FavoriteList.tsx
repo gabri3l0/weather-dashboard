@@ -1,5 +1,7 @@
 import {Button, CustomListItem, FlexBox, FlexBoxAlignItems, List, Text} from "@ui5/webcomponents-react";
-import {useState} from "react";
+import deleteIcon from '@ui5/webcomponents-icons/dist/delete.js';
+import {MouseEventHandler, useState} from "react";
+import {ButtonDomRef} from "@ui5/webcomponents-react/dist/webComponents/Button";
 
 type LocationType = {
     id: string,
@@ -45,12 +47,18 @@ export function FavoriteList() {
         }
     ])
 
+    const handleClick = (e: ButtonDomRef) => {
+        setLocationList(locationList.filter((location)=> location.id !== e.target.id))
+    }
+
     return (
         <>
-            <List>
+            <List
+                headerText="Favorite List"
+            >
                 {locationList.map((location)=> {
                     return (
-                        <CustomListItem>
+                        <CustomListItem key={location.id}>
                             <FlexBox
                                 justifyContent="SpaceAround"
                                 alignItems={FlexBoxAlignItems.Center}
@@ -89,6 +97,8 @@ export function FavoriteList() {
                                 <Button
                                     id={location.id}
                                     design="Negative"
+                                    icon={deleteIcon}
+                                    onClick={handleClick}
                                 />
                             </FlexBox>
                         </CustomListItem>
