@@ -1,7 +1,6 @@
 import {Button, CustomListItem, FlexBox, FlexBoxAlignItems, List, Text} from "@ui5/webcomponents-react";
 import deleteIcon from '@ui5/webcomponents-icons/dist/delete.js';
-import {MouseEventHandler, useState} from "react";
-import {ButtonDomRef} from "@ui5/webcomponents-react/dist/webComponents/Button";
+import {useState} from "react";
 
 type LocationType = {
     id: string,
@@ -11,7 +10,7 @@ type LocationType = {
     low: string,
     high: string,
 }
-export function FavoriteList() {
+export function SavedSavedLocationList() {
     const [locationList, setLocationList] = useState<Array<LocationType>>([
         {
             id: "1",
@@ -47,14 +46,15 @@ export function FavoriteList() {
         }
     ])
 
-    const handleClick = (e: ButtonDomRef) => {
+    // TODO review typo
+    const handleClick = (e: any) => {
         setLocationList(locationList.filter((location)=> location.id !== e.target.id))
     }
 
     return (
         <>
             <List
-                headerText="Favorite List"
+                headerText="Saved Location List"
             >
                 {locationList.map((location)=> {
                     return (
