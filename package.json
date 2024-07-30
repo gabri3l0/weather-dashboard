@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.51.15",
     "@ui5/webcomponents": "~1.24.0",
     "@ui5/webcomponents-fiori": "~1.24.0",
     "@ui5/webcomponents-icons": "~1.24.0",
