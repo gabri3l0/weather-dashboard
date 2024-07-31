@@ -92,7 +92,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
     const findCities = async (city: string) => {
         if (city === '') return []
         const response = await axios.get(
-            "https://openweathermap.org/data/2.5/findss", {
+            "https://openweathermap.org/data/2.5/finds", {
                 params: {
                     q: city,
                     appid: "439d4b804bc8187953eb36d2a8c26a02",

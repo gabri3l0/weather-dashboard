@@ -4,13 +4,12 @@ import {
     FlexBox,
     FlexBoxAlignItems,
     FlexBoxJustifyContent,
-    FlexBoxWrap,
+    FlexBoxWrap, IllustratedMessage,
     Text
 } from "@ui5/webcomponents-react";
 import {spacing} from "@ui5/webcomponents-react-base";
 import heart2Icon from '@ui5/webcomponents-icons/dist/heart-2.js';
 import heartIcon from '@ui5/webcomponents-icons/dist/heart.js';
-
 
 type CurrentWeatherProps =
     {
@@ -55,7 +54,7 @@ export function CurrentWeather({weather, handleSaveLocationClick, isLocationSave
                         height: '13rem'
                     }}
                 >
-                    {weather?.current && (
+                    {weather?.current ? (
                         <>
                             <div>
                                 <Text
@@ -82,7 +81,7 @@ export function CurrentWeather({weather, handleSaveLocationClick, isLocationSave
                                 onClick={()=>handleSaveLocationClick(weather)}
                             />
                         </>
-                    )}
+                    ): <IllustratedMessage name="NoData" size="Dot"/>}
                 </FlexBox>
             </Card>
         </FlexBox>

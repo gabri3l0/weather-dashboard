@@ -1,9 +1,13 @@
 import {
     Card,
-    FlexBox,
+    FlexBox, IllustratedMessage,
     Text
 } from "@ui5/webcomponents-react";
 import {spacing} from "@ui5/webcomponents-react-base";
+
+type ForecastedWeatherProps = {
+    forecastedWeather: Array<ForecastedWeatherType>,
+}
 
 type ForecastedWeatherType = {
     dt: number,
@@ -21,7 +25,7 @@ type ForecastedWeatherType = {
 // FORECASTED LIST
 // FORECASTEDITEM
 
-export function ForecastedWeather({forecastedWeather}: { forecastedWeather: Array<ForecastedWeatherType> }) {
+export function ForecastedWeather({forecastedWeather}: ForecastedWeatherProps) {
     return (
         <FlexBox
             // justifyContent="SpaceAround"
@@ -29,7 +33,7 @@ export function ForecastedWeather({forecastedWeather}: { forecastedWeather: Arra
         >
             <Card style={{height: "10rem", ...spacing.sapUiContentPadding }}>
                 <FlexBox justifyContent="SpaceAround">
-                    {forecastedWeather && (
+                    {forecastedWeather ? (
                         <>
                             {forecastedWeather?.slice(1,6).map((weather) => {
                                 const dayName = new Date(weather.dt * 1000).toLocaleString('en-us', {weekday:'long'})
@@ -55,7 +59,7 @@ export function ForecastedWeather({forecastedWeather}: { forecastedWeather: Arra
                                 )
                             })}
                         </>
-                    )}
+                    ): <IllustratedMessage name="NoData" size="Base"/>}
                 </FlexBox>
             </Card>
         </FlexBox>

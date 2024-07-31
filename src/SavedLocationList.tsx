@@ -1,4 +1,4 @@
-import {Card, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, List} from "@ui5/webcomponents-react";
+import {Card, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, IllustratedMessage, List} from "@ui5/webcomponents-react";
 import {LocationType, SavedLocationItem} from "./SavedLocationItem.tsx";
 import {spacing} from "@ui5/webcomponents-react-base";
 
@@ -18,20 +18,23 @@ export function SavedLocationList({locations, handleSelectLocationClick, handleR
             <Card
                 style={{height: "26rem"}}
             >
-                <List
-                    headerText="Saved Location List"
-                >
-                    {locations?.map((location)=> {
-                        return (
-                           <SavedLocationItem
-                               key={location.cityId}
-                               location={location}
-                               handleSelectLocationClick={handleSelectLocationClick}
-                               handleRemoveLocationClick={handleRemoveLocationClick}
-                           />
-                        )
-                    })}
-                </List>
+                {locations.length > 0 ? (
+                    <List
+                        headerText="Saved Location List"
+                    >
+                        {locations?.map((location)=> {
+                            return (
+                                <SavedLocationItem
+                                    key={location.cityId}
+                                    location={location}
+                                    handleSelectLocationClick={handleSelectLocationClick}
+                                    handleRemoveLocationClick={handleRemoveLocationClick}
+                                />
+                            )
+                        })}
+                    </List>
+                ) : <IllustratedMessage  name="NoSavedItems_v1" size="Dialog"/>}
+
             </Card>
         </FlexBox>
     )

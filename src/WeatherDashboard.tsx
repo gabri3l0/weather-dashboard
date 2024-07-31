@@ -7,15 +7,18 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {LocationType} from "./SavedLocationItem.tsx";
+import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js"
+import "@ui5/webcomponents-fiori/dist/illustrations/NoSavedItems_v1.js"
+
 
 
 export function WeatherDashboard() {
     const [savedLocations, setSavedLocations] = useState<Array<LocationType>>([])
     const [isLocationSaved, setIsLocationSaved] = useState(false)
     const [locationSelected, setLocationSelected] = useState<LocationType>()
+    const [isLoading, setIsLoading] = useState(false)
 
     const getWeather = async (location: any) => {
-        console.log(`location`, location)
         const response = await axios.get(
             "https://openweathermap.org/data/2.5/onecall",
             {
@@ -39,12 +42,15 @@ export function WeatherDashboard() {
         enabled: false
     })
 
+
     const weather = {
         ...locationSelected,
         ...data
     }
 
+
     const handleSuggestionItemClick = async (location: LocationType) => {
+        setIsLoading(true);
         setLocationSelected(location)
     }
 
@@ -70,9 +76,11 @@ export function WeatherDashboard() {
         setIsLocationSaved(!!savedLocations.find((savedLocation) => savedLocation.cityId === weather.cityId))
     }, [savedLocations, weather])
 
-    // console.log(`isPending`, isPending)
-    // console.log(`isError`, isError)
-    // console.log(`error`, error?.message)
+    useEffect(()=>{
+        if (!isPending) {
+            setIsLoading(false)
+        }
+    }, [isPending])
 
     return(
         <>
