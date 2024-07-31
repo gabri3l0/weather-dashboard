@@ -28,7 +28,7 @@ export function ForecastedWeather({forecastedWeather}: {forecastedWeather: Array
                                 />
                             </Text>
                             <Text style={{fontWeight: 'bold'}}>
-                                {`${weather.temp.min}°C / ${weather.temp.max}°C`}
+                                {`${(weather.temp.min).toFixed(0)}°C / ${(weather.temp.max).toFixed(0)}°C`}
                             </Text>
                             <Text style={{fontWeight: 'bold', fontSize:"1.2em", ...spacing.sapUiContentPadding}}>
                                 {dayName}

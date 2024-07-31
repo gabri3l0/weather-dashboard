@@ -51,7 +51,7 @@ export function CurrentWeather({weather, handleSaveLocationClick, isLocationSave
                             style={{width: "70%"}}
                         />
                     </Text>
-                    <Text>{weather.current.temp} °C</Text>
+                    <Text>{(weather.current.temp).toFixed(0)} °C</Text>
                     <Button
                         design={isLocationSaved ? "Negative" : "Transparent"}
                         icon={isLocationSaved ? heartIcon : heart2Icon}

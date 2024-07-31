@@ -20,9 +20,18 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
 
     const findCities = async (city: string) => {
         const response = await axios.get(
-            "https://jsonplaceholder.typicode.com/posts", {
+            // "https://openweathermap.org/data/2.5/finds", {
+            //     params: {
+            //         q: city,
+            //         appid: "439d4b804bc8187953eb36d2a8c26a02",
+            //         units:"metric"
+            //     }
+            // }
+            "https://openweathermap.org/data/2.5/finds", {
                 params: {
-                    userId: parseInt(city)
+                    q: city,
+                    appid: "439d4b804bc8187953eb36d2a8c26a02",
+                    units:"metric"
                 }
             }
         );
@@ -68,26 +77,21 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                 valueState={data?.length == 0 ? 'Error': 'None'}
             >
 
-                {data?.map((location: any) => {
+                {data?.list?.map((location: any) => {
                     return(
                         <SuggestionItem
                             key={location.id}
-                            text={`${location.title}`}
+                            additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}
+                            description={`${location.coord.lat}, ${location.coord.lon}`}
+                            image={`https://openweathermap.org/images/flags/${location.sys.country.toLowerCase()}.png`}
+                            text={`${location.name}, ${location.sys.country}`}
+                            data-lat={location.coord.lat}
+                            data-lon={location.coord.lon}
+                            data-country-code={location.sys.country}
+                            data-city-name={location.name}
+                            data-city-id={location.id}
                             type="Active"
                         />
-                        // <SuggestionItem
-                        //     key={location.id}
-                        //     additionalText={`${location.main.temp} °C`}
-                        //     description={`${location.coord.lat}, ${location.coord.lon}`}
-                        //     image={`https://openweathermap.org/images/flags/${location.sys.country.toLowerCase()}.png`}
-                        //     text={`${location.name}, ${location.sys.country}`}
-                        //     data-lat={location.coord.lat}
-                        //     data-lon={location.coord.lon}
-                        //     data-country-code={location.sys.country}
-                        //     data-city-name={location.name}
-                        //     data-city-id={location.id}
-                        //     type="Active"
-                        // />
                     )
                 })}
             </Input>
