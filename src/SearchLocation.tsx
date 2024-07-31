@@ -3,9 +3,16 @@ import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import {spacing} from "@ui5/webcomponents-react-base";
 import {useState} from "react";
 
+type LocationType = {
+    name: string,
+    sys: {country: string},
+    main: {temp: string},
+    coord: {lat: string, lon: string},
+    id: string
+}
 
 export function SearchLocation() {
-    const [locations, setLocations] = useState([])
+    const [locations, setLocations] = useState<Array<LocationType>>([])
 
     const handleClick = () => {
         const tempData = [
@@ -36,7 +43,8 @@ export function SearchLocation() {
         // const { isPending, isError, data, error } = response
     }
 
-    const handleSuggestionItemSelected = (event) => {
+    {/*TODO typo*/}
+    const handleSuggestionItemSelected = (event: any) => {
         const locationSelected = event.detail.item.dataset;
         console.log(locationSelected);
     }
@@ -57,8 +65,7 @@ export function SearchLocation() {
                 onSuggestionItemSelect={handleSuggestionItemSelected}
             >
 
-                {/*TODO typo*/}
-                {locations.map((location: any) => {
+                {locations.map((location) => {
                     return(
                         <SuggestionItem
                             key={location.id}
