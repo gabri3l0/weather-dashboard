@@ -1,23 +1,13 @@
 import {Card, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, List} from "@ui5/webcomponents-react";
-import {SavedWeatherItem} from "./SavedWeatherItem.tsx";
+import {SavedLocationItem} from "./SavedLocationItem.tsx";
 import {spacing} from "@ui5/webcomponents-react-base";
 
-export type LocationType = {
-    id: string,
-    city: string,
-    country: string,
-    temp: string,
-    low: string,
-    high: string,
-}
-
-type SavedWeatherListProps = {
+type SavedLocationListProps = {
     locations: any,
     handleItemClick: any,
     handleDelete: any
 }
-export function SavedWeatherList({locations, handleItemClick, handleDelete}: SavedWeatherListProps) {
-    if (locations.lengt < 1) return
+export function SavedLocationList({locations, handleItemClick, handleDelete}: SavedLocationListProps) {
     return (
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}
@@ -31,10 +21,11 @@ export function SavedWeatherList({locations, handleItemClick, handleDelete}: Sav
                     {locations.map((location: any)=> {
                         return (
                            <>
-                               <SavedWeatherItem
+                               <SavedLocationItem
                                    location={location}
                                    handleDelete={handleDelete}
-                                   handleItemClick={handleItemClick}/>
+                                   handleItemClick={handleItemClick}
+                               />
                            </>
                         )
                     })}
