@@ -336,9 +336,6 @@ export function ForecastedWeather() {
                             wrap={FlexBoxWrap.Wrap}
                             style={spacing.sapUiContentPadding}
                         >
-                            <Text style={{fontWeight: 'bold', fontSize:"1.2em", ...spacing.sapUiContentPadding}}>
-                                {dayName}
-                            </Text>
                             <Text>
                                 <img
                                     alt='weather'
@@ -348,6 +345,9 @@ export function ForecastedWeather() {
                             </Text>
                             <Text style={{fontWeight: 'bold'}}>
                                 {`${weather.temp.min}°C / ${weather.temp.max}°C`}
+                            </Text>
+                            <Text style={{fontWeight: 'bold', fontSize:"1.2em", ...spacing.sapUiContentPadding}}>
+                                {dayName}
                             </Text>
                         </FlexBox>
                     </Card>

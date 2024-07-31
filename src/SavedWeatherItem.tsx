@@ -1,17 +1,19 @@
 import {Button, CustomListItem, FlexBox, FlexBoxAlignItems, Text} from "@ui5/webcomponents-react";
 import deleteIcon from '@ui5/webcomponents-icons/dist/delete.js';
-import {LocationType} from "./SavedWeatherList.tsx";
 
 
 type PropsType = {
-    location: LocationType,
+    location: any,
     handleDelete: any,
     handleItemClick: any,
 }
 export function SavedWeatherItem({location, handleDelete, handleItemClick}: PropsType) {
     return (
         <CustomListItem
-            onClick={() => handleItemClick(location)}
+            key={location.id}
+            onClick={()=>handleItemClick(location)}
+            data-lat={location.lat}
+            data-lon={location.lon}
         >
             <FlexBox
                 justifyContent="SpaceAround"
@@ -20,33 +22,22 @@ export function SavedWeatherItem({location, handleDelete, handleItemClick}: Prop
                     width: '100%'
                 }}
             >
-                <Text
-                    style={{
-                        fontWeight: 'bold'
-                    }}
-                >
-                    {location.city}, {location.country}
+                <Text>
+                    <img
+                        alt='weather'
+                        src={`https://openweathermap.org/images/flags/${location.countryCode?.toLowerCase()}.png`}
+                        style={{width: "70%"}}
+                    />
                 </Text>
                 <Text
                     style={{
                         fontWeight: 'bold'
                     }}
                 >
-                    {location.id}
+                    {location.cityName}, {location.countryCode}
                 </Text>
-                <Text
-                    style={{
-                        fontWeight: 'bold'
-                    }}
-                >
-                    ICON
-                </Text>
-                <Text
-                    style={{
-                        fontWeight: 'bold'
-                    }}
-                >
-                    L:{location.low}, H: {location.high}
+                <Text style={{fontWeight: 'bold'}}>
+                    {`${location.lat}, ${location.lon}`}
                 </Text>
                 <Button
                     id={location.id}

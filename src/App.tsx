@@ -1,9 +1,6 @@
 import actionSettingsIcon from '@ui5/webcomponents-icons/dist/action-settings.js';
 import { Avatar, ShellBar } from '@ui5/webcomponents-react';
-import { SavedWeatherList } from "./SavedWeatherList.tsx";
-import {SearchLocation} from "./SearchLocation.tsx";
-import {CurrentWeather} from "./CurrentWeather.tsx";
-import {ForecastedWeather} from "./ForecastedWeather.tsx";
+import {WeatherDashboard} from "./WeatherDashboard.tsx";
 
 function App() {
   return (
@@ -18,10 +15,7 @@ function App() {
             primaryTitle="Weather Dashboard"
             profile={<Avatar icon={actionSettingsIcon} />}
         />
-        <SearchLocation/>
-        <CurrentWeather/>
-        <ForecastedWeather/>
-        <SavedWeatherList/>
+        <WeatherDashboard/>
     </>
   );
 }
