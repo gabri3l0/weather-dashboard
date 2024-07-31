@@ -7,7 +7,7 @@ type PropsType = {
     handleDelete: any,
     handleItemClick: any,
 }
-export function SavedWeatherItem({location, handleDelete, handleItemClick}: PropsType) {
+export function SavedLocationItem({location, handleDelete, handleItemClick}: PropsType) {
     return (
         <CustomListItem
             key={location.cityId}
