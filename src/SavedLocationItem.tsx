@@ -2,15 +2,23 @@ import {Button, CustomListItem, FlexBox, FlexBoxAlignItems, Text} from "@ui5/web
 import deleteIcon from '@ui5/webcomponents-icons/dist/delete.js';
 
 
-type PropsType = {
-    location: any,
+type SavedLocationItemProps = {
+    location: LocationType,
     handleRemoveLocationClick: any,
     handleSelectLocationClick: any,
 }
-export function SavedLocationItem({location, handleRemoveLocationClick, handleSelectLocationClick}: PropsType) {
+
+export type LocationType = {
+    cityId: string,
+    lat: string,
+    lon: string,
+    cityName: string,
+    countryCode: string,
+}
+
+export function SavedLocationItem({location, handleRemoveLocationClick, handleSelectLocationClick}: SavedLocationItemProps) {
     return (
         <CustomListItem
-            key={location.cityId}
             onClick={()=>handleSelectLocationClick(location)}
             data-lat={location.lat}
             data-lon={location.lon}

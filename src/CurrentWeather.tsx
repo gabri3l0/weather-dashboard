@@ -31,6 +31,9 @@ type WeatherType ={
     timezone?: string,
 }
 
+// WEATHER
+// CHARTS
+
 export function CurrentWeather({weather, handleSaveLocationClick, isLocationSaved}: CurrentWeatherProps) {
     const date = new Date().toLocaleString('en-US', { timeZone: weather?.timezone })
     return (

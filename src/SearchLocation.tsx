@@ -59,7 +59,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                 lon: currentLocation[0].lon,
                 countryCode: currentLocation[0].country,
                 cityName: currentLocation[0].name,
-                id: currentLocation[0].lat.toString()+currentLocation[0].lon.toString(),
+                cityId: currentLocation[0].lat.toString()+currentLocation[0].lon.toString(),
             })
     }, [currentLocation?.length>0])
 
