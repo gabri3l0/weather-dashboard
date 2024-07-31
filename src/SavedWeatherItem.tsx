@@ -10,7 +10,7 @@ type PropsType = {
 export function SavedWeatherItem({location, handleDelete, handleItemClick}: PropsType) {
     return (
         <CustomListItem
-            key={location.id}
+            key={location.cityId}
             onClick={()=>handleItemClick(location)}
             data-lat={location.lat}
             data-lon={location.lon}
@@ -40,10 +40,9 @@ export function SavedWeatherItem({location, handleDelete, handleItemClick}: Prop
                     {`${location.lat}, ${location.lon}`}
                 </Text>
                 <Button
-                    id={location.id}
                     design="Negative"
                     icon={deleteIcon}
-                    onClick={handleDelete}
+                    onClick={()=>handleDelete(location.cityId)}
                 />
             </FlexBox>
         </CustomListItem>

@@ -39,7 +39,7 @@ export function CurrentWeather({weather, handleClick}: {weather: any, handleClic
                                 fontWeight: 'bold'
                             }}
                         >
-                            Monterrey, MX
+                            {weather.cityName}, {weather.countryCode}
                         </Text>
                         <Text>{date}</Text>
                     </div>

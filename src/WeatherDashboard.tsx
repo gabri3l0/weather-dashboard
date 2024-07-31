@@ -8,37 +8,29 @@ import {useState} from "react";
 
 export function WeatherDashboard() {
     const [weather, setWeather] = useState({})
-    const [savedLocations, setSavedLocations] = useState([
-
-    ])
+    const [savedLocations, setSavedLocations] = useState<Array<any>>([])
     const handleItemClick = (location: any) => {
-        console.log(`search location`, location)
+        getWeather(location)
     }
 
-    // TODO review typo
-    const handleDelete = (e: any) => {
-        // TODO verify filter attr
-        setSavedLocations(savedLocations.filter((location) => location.cityId !== e.target.id))
+    const handleDelete = (cityId: string) => {
+        setSavedLocations(savedLocations.filter((location: any) => location.cityId !== cityId))
     }
 
     const handleClick = (location: any) => {
-        console.log(`location`, location)
         setSavedLocations([location, ...savedLocations])
     }
 
-    {/*TODO query weather*/}
-    const onSuggestionItemSelect = (event: any) => {
+    const getWeather = (location: any) => {
         console.log(`QUERY GET CURRENT WEATHER`)
-        const locationSelected = event.detail.item.dataset;
-
         setWeather({
-            ...locationSelected,
+            ...location,
             "lat": 25.6667,
             "lon": -100.3167,
             "timezone": "Europe/Rome",
             "timezone_offset": -21600,
             "current": {
-            "dt": 1722380248,
+                "dt": 1722380248,
                 "sunrise": 1722341220,
                 "sunset": 1722389291,
                 "temp": 33.27,
@@ -53,16 +45,19 @@ export function WeatherDashboard() {
                 "wind_deg": 204,
                 "wind_gust": 13.41,
                 "weather": [
-                {
-                    "id": 800,
-                    "main": "Clear",
-                    "description": "clear sky",
-                    "icon": "01d"
-                }
-            ]
-        }
+                    {
+                        "id": 800,
+                        "main": "Clear",
+                        "description": "clear sky",
+                        "icon": "01d"
+                    }
+                ]
+            }
         })
-        console.log(weather);
+    }
+
+    const onSuggestionItemSelect = (location: any) => {
+        getWeather(location.detail.item.dataset)
     }
 
     return(

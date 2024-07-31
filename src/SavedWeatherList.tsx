@@ -2,15 +2,6 @@ import {Card, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, List} from "@ui5/webc
 import {SavedWeatherItem} from "./SavedWeatherItem.tsx";
 import {spacing} from "@ui5/webcomponents-react-base";
 
-export type LocationType = {
-    id: string,
-    city: string,
-    country: string,
-    temp: string,
-    low: string,
-    high: string,
-}
-
 type SavedWeatherListProps = {
     locations: any,
     handleItemClick: any,
@@ -34,7 +25,8 @@ export function SavedWeatherList({locations, handleItemClick, handleDelete}: Sav
                                <SavedWeatherItem
                                    location={location}
                                    handleDelete={handleDelete}
-                                   handleItemClick={handleItemClick}/>
+                                   handleItemClick={handleItemClick}
+                               />
                            </>
                         )
                     })}
