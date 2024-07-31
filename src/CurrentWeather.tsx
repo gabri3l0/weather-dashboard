@@ -13,6 +13,8 @@ import heart2Icon from '@ui5/webcomponents-icons/dist/heart-2.js';
 export function CurrentWeather({weather, handleClick}: {weather: any, handleClick:any}) {
     const date = new Date().toLocaleString('en-US', { timeZone: weather.timezone })
 
+    if (!weather.current) return
+
     return (
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}

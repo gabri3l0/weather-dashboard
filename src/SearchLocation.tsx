@@ -11,10 +11,12 @@ type LocationType = {
     id: string
 }
 
-export function SearchLocation({handleSuggestionItemSelected}: {handleSuggestionItemSelected: any}) {
+export function SearchLocation({onSuggestionItemSelect}: {onSuggestionItemSelect: any}) {
     const [locations, setLocations] = useState<Array<LocationType>>([])
 
+    // TODO query cities
     const handleClick = () => {
+        console.log(`QUERY SEARCH CITIES`)
         const tempData = [
             {
                 name: 'London',
@@ -56,7 +58,7 @@ export function SearchLocation({handleSuggestionItemSelected}: {handleSuggestion
                 showSuggestions
                 noTypeahead={true}
                 onChange={handleClick}
-                onSuggestionItemSelect={handleSuggestionItemSelected}
+                onSuggestionItemSelect={onSuggestionItemSelect}
             >
 
                 {locations.map((location) => {
@@ -71,6 +73,7 @@ export function SearchLocation({handleSuggestionItemSelected}: {handleSuggestion
                             data-lon={location.coord.lon}
                             data-country-code={location.sys.country}
                             data-city-name={location.name}
+                            data-city-id={location.id}
                             type="Active"
                         />
                     )
