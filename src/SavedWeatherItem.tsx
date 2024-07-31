@@ -4,14 +4,15 @@ import {LocationType} from "./SavedWeatherList.tsx";
 
 
 type PropsType = {
-    location: LocationType,
+    location: any,
     handleDelete: any,
     handleItemClick: any,
 }
 export function SavedWeatherItem({location, handleDelete, handleItemClick}: PropsType) {
     return (
         <CustomListItem
-            onClick={() => handleItemClick(location)}
+            key={location.id}
+            onClick={()=>handleItemClick(location)}
         >
             <FlexBox
                 justifyContent="SpaceAround"
@@ -25,28 +26,18 @@ export function SavedWeatherItem({location, handleDelete, handleItemClick}: Prop
                         fontWeight: 'bold'
                     }}
                 >
-                    {location.city}, {location.country}
+                    Monterey, MX
+                    {/*{location.city}, {location.country}*/}
                 </Text>
-                <Text
-                    style={{
-                        fontWeight: 'bold'
-                    }}
-                >
-                    {location.id}
+                <Text>
+                    <img
+                        alt='weather'
+                        src={`https://openweathermap.org/img/wn/${location.weather[0].icon}@2x.png`}
+                        style={{width: "70%"}}
+                    />
                 </Text>
-                <Text
-                    style={{
-                        fontWeight: 'bold'
-                    }}
-                >
-                    ICON
-                </Text>
-                <Text
-                    style={{
-                        fontWeight: 'bold'
-                    }}
-                >
-                    L:{location.low}, H: {location.high}
+                <Text style={{fontWeight: 'bold'}}>
+                    {`${location.temp.min}°C / ${location.temp.max}°C`}
                 </Text>
                 <Button
                     id={location.id}

@@ -11,50 +11,13 @@ export type LocationType = {
     low: string,
     high: string,
 }
-export function SavedWeatherList() {
-    const [locationList, setLocationList] = useState<Array<LocationType>>([
-        {
-            id: "12",
-            city: "Monterrey",
-            country: 'MX',
-            temp: '23C',
-            low: '24C',
-            high: '25C',
-        },
-        {
-            id: "22",
-            city: "Monterrey",
-            country: 'MX',
-            temp: '23C',
-            low: '24C',
-            high: '25C',
-        },
-        {
-            id: "33",
-            city: "Monterrey",
-            country: 'MX',
-            temp: '23C',
-            low: '24C',
-            high: '25C',
-        }
-        ,        {
-            id: "45",
-            city: "Monterrey",
-            country: 'MX',
-            temp: '23C',
-            low: '24C',
-            high: '25C',
-        }
-    ])
 
-    const handleItemClick = (location: LocationType) => {
-        console.log(`search location`, location)
-    }
-
-    // TODO review typo
-    const handleDelete = (e: any) => {
-        setLocationList(locationList.filter((location)=> location.id !== e.target.id))
-    }
+type SavedWeatherListProps = {
+    locations: any,
+    handleItemClick: any,
+    handleDelete: any
+}
+export function SavedWeatherList({locations, handleItemClick, handleDelete}: SavedWeatherListProps) {
 
     return (
         <FlexBox
@@ -66,7 +29,7 @@ export function SavedWeatherList() {
                 <List
                     headerText="Saved Location List"
                 >
-                    {locationList.map((location)=> {
+                    {locations.map((location)=> {
                         return (
                            <>
                                <SavedWeatherItem
