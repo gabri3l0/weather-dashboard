@@ -11,7 +11,7 @@ type LocationType = {
     id: string
 }
 
-export function SearchLocation() {
+export function SearchLocation({handleSuggestionItemSelected}: {handleSuggestionItemSelected: any}) {
     const [locations, setLocations] = useState<Array<LocationType>>([])
 
     const handleClick = () => {
@@ -43,12 +43,6 @@ export function SearchLocation() {
         // const { isPending, isError, data, error } = response
     }
 
-    {/*TODO typo*/}
-    const handleSuggestionItemSelected = (event: any) => {
-        const locationSelected = event.detail.item.dataset;
-        console.log(locationSelected);
-    }
-
     return (
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}
@@ -76,6 +70,7 @@ export function SearchLocation() {
                             data-lat={location.coord.lat}
                             data-lon={location.coord.lon}
                             data-country-code={location.sys.country}
+                            data-city-name={location.name}
                             type="Active"
                         />
                     )
