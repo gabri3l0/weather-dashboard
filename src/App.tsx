@@ -4,6 +4,7 @@ import { SavedWeatherList } from "./SavedWeatherList.tsx";
 import {SearchLocation} from "./SearchLocation.tsx";
 import {CurrentWeather} from "./CurrentWeather.tsx";
 import {ForecastedWeather} from "./ForecastedWeather.tsx";
+import {WeatherDashboard} from "./WeatherDashboard.tsx";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             primaryTitle="Weather Dashboard"
             profile={<Avatar icon={actionSettingsIcon} />}
         />
+        <WeatherDashboard/>
         <SearchLocation/>
         <CurrentWeather/>
         <ForecastedWeather/>
