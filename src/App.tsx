@@ -2,6 +2,7 @@ import actionSettingsIcon from '@ui5/webcomponents-icons/dist/action-settings.js
 import { Avatar, ShellBar } from '@ui5/webcomponents-react';
 import { SavedLocationList } from "./SavedLocationList.tsx";
 import {SearchLocation} from "./SearchLocation.tsx";
+import {CurrentWeather} from "./CurrentWeather.tsx";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             profile={<Avatar icon={actionSettingsIcon} />}
         />
         <SearchLocation/>
+        <CurrentWeather/>
         <SavedLocationList/>
     </>
   );

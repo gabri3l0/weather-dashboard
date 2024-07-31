@@ -1,3 +1,5 @@
+import {Card, FlexBox, FlexBoxAlignItems, FlexBoxJustifyContent, FlexBoxWrap, Text} from "@ui5/webcomponents-react";
+import {spacing} from "@ui5/webcomponents-react-base";
 
 
 const weather = {
@@ -1718,7 +1720,43 @@ export function CurrentWeather() {
     console.log(locationDate)
 
     return (
-     <>
-     </>
+        <FlexBox
+            justifyContent={FlexBoxJustifyContent.Center}
+            wrap={FlexBoxWrap.Wrap}
+        >
+            <Card
+                style={spacing.sapUiContentPadding }
+            >
+                <FlexBox
+                    justifyContent="SpaceAround"
+                    alignItems={FlexBoxAlignItems.Center}
+                    style={{
+                        width: '100%'
+                    }}
+                >
+
+                    {/*TODO set values*/}
+                    <div>
+                        <Text
+                            style={{
+                                display: "block",
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            Monterrey, MX
+                        </Text>
+                        <Text>{locationDate}</Text>
+                    </div>
+                    <Text>
+                        <img
+                            alt='weather'
+                            src={`https://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
+                            style={{width: "70%"}}
+                        />
+                    </Text>
+                    <Text>{weather.current.temp} °C</Text>
+                </FlexBox>
+            </Card>
+        </FlexBox>
     )
 }
