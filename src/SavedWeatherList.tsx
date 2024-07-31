@@ -1,5 +1,4 @@
 import {Card, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, List} from "@ui5/webcomponents-react";
-import {useState} from "react";
 import {SavedWeatherItem} from "./SavedWeatherItem.tsx";
 import {spacing} from "@ui5/webcomponents-react-base";
 
@@ -18,7 +17,7 @@ type SavedWeatherListProps = {
     handleDelete: any
 }
 export function SavedWeatherList({locations, handleItemClick, handleDelete}: SavedWeatherListProps) {
-
+    if (locations.lengt < 1) return
     return (
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}
@@ -29,7 +28,7 @@ export function SavedWeatherList({locations, handleItemClick, handleDelete}: Sav
                 <List
                     headerText="Saved Location List"
                 >
-                    {locations.map((location)=> {
+                    {locations.map((location: any)=> {
                         return (
                            <>
                                <SavedWeatherItem

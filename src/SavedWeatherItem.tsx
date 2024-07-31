@@ -1,6 +1,5 @@
 import {Button, CustomListItem, FlexBox, FlexBoxAlignItems, Text} from "@ui5/webcomponents-react";
 import deleteIcon from '@ui5/webcomponents-icons/dist/delete.js';
-import {LocationType} from "./SavedWeatherList.tsx";
 
 
 type PropsType = {
@@ -13,6 +12,8 @@ export function SavedWeatherItem({location, handleDelete, handleItemClick}: Prop
         <CustomListItem
             key={location.id}
             onClick={()=>handleItemClick(location)}
+            data-lat={location.lat}
+            data-lon={location.lon}
         >
             <FlexBox
                 justifyContent="SpaceAround"
@@ -21,23 +22,22 @@ export function SavedWeatherItem({location, handleDelete, handleItemClick}: Prop
                     width: '100%'
                 }}
             >
+                <Text>
+                    <img
+                        alt='weather'
+                        src={`https://openweathermap.org/images/flags/${location.countryCode?.toLowerCase()}.png`}
+                        style={{width: "70%"}}
+                    />
+                </Text>
                 <Text
                     style={{
                         fontWeight: 'bold'
                     }}
                 >
-                    Monterey, MX
-                    {/*{location.city}, {location.country}*/}
-                </Text>
-                <Text>
-                    <img
-                        alt='weather'
-                        src={`https://openweathermap.org/img/wn/${location.weather[0].icon}@2x.png`}
-                        style={{width: "70%"}}
-                    />
+                    {location.cityName}, {location.countryCode}
                 </Text>
                 <Text style={{fontWeight: 'bold'}}>
-                    {`${location.temp.min}°C / ${location.temp.max}°C`}
+                    {`${location.lat}, ${location.lon}`}
                 </Text>
                 <Button
                     id={location.id}
