@@ -1,6 +1,6 @@
 import {Button, CustomListItem, FlexBox, FlexBoxAlignItems, Text} from "@ui5/webcomponents-react";
 import deleteIcon from '@ui5/webcomponents-icons/dist/delete.js';
-import {LocationType} from "./SavedLocationList.tsx";
+import {LocationType} from "./SavedWeatherList.tsx";
 
 
 type PropsType = {
@@ -8,7 +8,7 @@ type PropsType = {
     handleDelete: any,
     handleItemClick: any,
 }
-export function SavedLocationItem({location, handleDelete, handleItemClick}: PropsType) {
+export function SavedWeatherItem({location, handleDelete, handleItemClick}: PropsType) {
     return (
         <CustomListItem
             onClick={() => handleItemClick(location)}

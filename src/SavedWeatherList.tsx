@@ -1,6 +1,6 @@
 import {List} from "@ui5/webcomponents-react";
 import {useState} from "react";
-import {SavedLocationItem} from "./SavedLocationItem.tsx";
+import {SavedWeatherItem} from "./SavedWeatherItem.tsx";
 
 export type LocationType = {
     id: string,
@@ -10,7 +10,7 @@ export type LocationType = {
     low: string,
     high: string,
 }
-export function SavedLocationList() {
+export function SavedWeatherList() {
     const [locationList, setLocationList] = useState<Array<LocationType>>([
         {
             id: "12",
@@ -63,7 +63,7 @@ export function SavedLocationList() {
                 {locationList.map((location)=> {
                     return (
                        <>
-                           <SavedLocationItem
+                           <SavedWeatherItem
                                location={location}
                                handleDelete={handleDelete}
                                handleItemClick={handleItemClick}/>
