@@ -23,17 +23,18 @@ type devicePositionType = {
 
 export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionItemClick: (location: LocationType)=>void,}) {
     const showToast = Modals.useShowToast();
-    const [city, setCity] = useState('')
+    const [cityToSearch, setCityToSearch] = useState('')
+    // const [isLoading, setIsLoading] = useState(false)
     const [devicePosition, setDevicePosition] = useState<devicePositionType>()
 
-    const getLocationByLatAndLon = async () => {
+    const getCity = async () => {
         if (!devicePosition?.lon) return []
         const response = await axios.get(
             "http://api.openweathermap.org/geo/1.0/reverse", {
                 params: {
                     lat: devicePosition?.lat,
                     lon: devicePosition?.lon,
-                    limit: 5,
+                    limit: 1,
                     appid: "625a5ca7ad433926a04e1614e116217e",
                 }
             }
@@ -41,31 +42,51 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
         return response.data;
     };
 
-    const responseReverseLocation = useQuery({
+    const responseGetCity = useQuery({
         queryKey: ['location'],
-        queryFn: ()=>getLocationByLatAndLon(),
+        queryFn: ()=>getCity(),
+        staleTime: 0,
+        retry: false,
+        // gcTime: 0,
+        enabled: false
+    });
+
+    const city = responseGetCity?.data ?? []
+
+    const findCities = async (cityToSearch: string) => {
+        if (cityToSearch === '') return []
+        const response = await axios.get(
+            "https://openweathermap.org/data/2.5/finds", {
+                params: {
+                    q: cityToSearch,
+                    appid: "439d4b804bc8187953eb36d2a8c26a02",
+                    units: "metric"
+                }
+            }
+
+            // "http://api.openweathermap.org/geo/1.0/direct", {
+            //     params: {
+            //         q: cityToSearch,
+            //         appid: "625a5ca7ad433926a04e1614e116217e",
+            //         limit: 5,
+            //         units:"metric"
+            //     }
+            // }
+        );
+        return response.data;
+    };
+
+    const responseFindCities = useQuery({
+        queryKey: ['cities', cityToSearch],
+        queryFn: ()=>findCities(cityToSearch),
         staleTime: 0,
         retry: false,
         // gcTime: 0,
         enabled: false
     })
 
-    const currentLocation = responseReverseLocation.data
+    const cities = responseFindCities?.data?.list ?? responseFindCities?.data
 
-    useEffect(()=> {
-        if (currentLocation && currentLocation[0] && currentLocation[0].lat)
-            handleSuggestionItemClick({
-                lat: currentLocation[0].lat,
-                lon: currentLocation[0].lon,
-                countryCode: currentLocation[0].country,
-                cityName: currentLocation[0].name,
-                cityId: currentLocation[0].lat.toString()+currentLocation[0].lon.toString(),
-            })
-    }, [currentLocation?.length>0])
-
-    useEffect(()=> {
-        responseReverseLocation.refetch()
-    }, [devicePosition])
 
     const handleGetLocation = () => {
         if (navigator.geolocation) {
@@ -89,46 +110,25 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
         }
     };
 
-    const findCities = async (city: string) => {
-        if (city === '') return []
-        const response = await axios.get(
-            "https://openweathermap.org/data/2.5/finds", {
-                params: {
-                    q: city,
-                    appid: "439d4b804bc8187953eb36d2a8c26a02",
-                    units: "metric"
-                }
-            }
+    useEffect(()=> {
+        if (city && city.length > 0) {
+            handleSuggestionItemClick({
+                lat: city[0].lat,
+                lon: city[0].lon,
+                countryCode: city[0].country,
+                cityName: city[0].name,
+                cityId: city[0].lat.toString()+city[0].lon.toString(),
+            })
+        }
+    }, [city])
 
-            // "http://api.openweathermap.org/geo/1.0/direct", {
-            //     params: {
-            //         q: city,
-            //         appid: "625a5ca7ad433926a04e1614e116217e",
-            //         limit: 5,
-            //         units:"metric"
-            //     }
-            // }
-        );
-        return response.data;
-    };
-
-    const { isPending, isError, data, error, refetch } = useQuery({
-        queryKey: ['cities', city],
-        queryFn: ()=>findCities(city),
-        staleTime: 0,
-        retry: false,
-        // gcTime: 0,
-        enabled: false
-    })
-
-    // console.log(`isPending`, isPending)
-    // console.log(`isError`, isError)
-    // console.log(`data`, data)
-    // console.log(`error`, error?.message)
+    useEffect(()=> {
+        responseGetCity.refetch()
+    }, [devicePosition])
 
 
-    if (error) showToast({
-        children: error?.message
+    if (responseFindCities.error) showToast({
+        children: responseFindCities.error?.message
     });
 
     return (
@@ -149,12 +149,12 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                         placeholder="Type a city name"
                         showSuggestions
                         noTypeahead={true}
-                        onInput={(event)=>setCity(event.target.value)}
-                        onChange={()=> refetch()}
+                        onInput={(event)=>setCityToSearch(event.target.value)}
+                        onChange={()=> responseFindCities.refetch()}
                         onSuggestionItemSelect={(event)=>handleSuggestionItemClick(event.detail.item.dataset as LocationType)}
-                        valueState={data?.length == 0 ? 'Error': 'None'}
+                        valueState={(cities?.length == 0 && !responseFindCities.isPending) ? 'Error': 'None'}
                     >
-                        {data?.list?.map((location: any) => {
+                        {cities?.map((location: any) => {
                             return(
                                 <SuggestionItem
                                     key={location.id}
@@ -172,7 +172,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                             )
                         })}
 
-                        {/*{data?.map((location: any) => {*/}
+                        {/*{cities?.map((location: any) => {*/}
                         {/*    return(*/}
                         {/*        <SuggestionItem*/}
                         {/*            key={location.id}*/}
