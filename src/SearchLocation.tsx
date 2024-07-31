@@ -1,7 +1,8 @@
 import {
+    Button,
     FlexBox,
     FlexBoxJustifyContent,
-    FlexBoxWrap,
+    FlexBoxWrap, Grid,
     Icon,
     Input,
     Modals,
@@ -9,23 +10,93 @@ import {
 } from "@ui5/webcomponents-react";
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import {spacing} from "@ui5/webcomponents-react-base";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
+import locateMeIcon from '@ui5/webcomponents-icons/dist/locate-me.js';
+
+type devicePositionType = {
+    lat?: string,
+    lon?: string
+}
 
 export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionItemClick: any}) {
     // TODO view error
-    // const showToast = Modals.useShowToast();
+    const showToast = Modals.useShowToast();
     const [city, setCity] = useState('')
+    const [devicePosition, setDevicePosition] = useState<devicePositionType>()
+
+    const getLocationByLatAndLon = async () => {
+        if (!devicePosition?.lon) return []
+        const response = await axios.get(
+            "http://api.openweathermap.org/geo/1.0/reverse", {
+                params: {
+                    lat: devicePosition?.lat,
+                    lon: devicePosition?.lon,
+                    limit: 5,
+                    appid: "625a5ca7ad433926a04e1614e116217e",
+                }
+            }
+        );
+        return response.data;
+    };
+
+    const responseReverseLocation = useQuery({
+        queryKey: ['location'],
+        queryFn: ()=>getLocationByLatAndLon(),
+        staleTime: 0,
+        retry: false,
+        // gcTime: 0,
+        enabled: false
+    })
+
+    const currentLocation = responseReverseLocation.data
+
+    useEffect(()=> {
+        if (currentLocation && currentLocation[0] && currentLocation[0].lat)
+            handleSuggestionItemClick({
+                lat: currentLocation[0].lat,
+                lon: currentLocation[0].lon,
+                countryCode: currentLocation[0].country,
+                cityName: currentLocation[0].name,
+                id: currentLocation[0].lat.toString()+currentLocation[0].lon.toString(),
+            })
+    }, [currentLocation?.length>0])
+
+    useEffect(()=> {
+        responseReverseLocation.refetch()
+    }, [devicePosition])
+
+    const handleGetLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setDevicePosition({
+                        lat: position.coords.latitude.toString(),
+                        lon: position.coords.longitude.toString()
+                    })
+                },
+                (error) => {
+                    showToast({
+                        children: error.message
+                    })
+                }
+            );
+        } else {
+            showToast({
+                children: 'Geolocation is not supported by this browser.'
+            })
+        }
+    };
 
     const findCities = async (city: string) => {
         if (city === '') return []
         const response = await axios.get(
-            "https://openweathermap.org/data/2.5/finds", {
+            "https://openweathermap.org/data/2.5/findss", {
                 params: {
                     q: city,
                     appid: "439d4b804bc8187953eb36d2a8c26a02",
-                    units:"metric"
+                    units: "metric"
                 }
             }
 
@@ -57,9 +128,9 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
 
 
     // TODO view error
-    // if (error) showToast({
-    //     children: error?.message
-    // });
+    if (error) showToast({
+        children: error?.message
+    });
 
     return (
         <FlexBox
@@ -67,55 +138,63 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
             wrap={FlexBoxWrap.Wrap}
             style={spacing.sapUiContentPadding}
         >
+            <Grid>
+                <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL12 L12 M12 S12'>
+                    <Button
+                        icon={locateMeIcon}
+                        onClick={handleGetLocation}
+                    />
+                    <Input
+                        type="Text"
+                        icon={<Icon name="search" />}
+                        placeholder="Type a city name"
+                        showSuggestions
+                        noTypeahead={true}
+                        onInput={(event)=>setCity(event.target.value)}
+                        onChange={()=> refetch()}
+                        onSuggestionItemSelect={(event)=>handleSuggestionItemClick(event.detail.item.dataset)}
+                        valueState={data?.length == 0 ? 'Error': 'None'}
+                    >
+                        {data?.list?.map((location: any) => {
+                            return(
+                                <SuggestionItem
+                                    key={location.id}
+                                    // additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}
+                                    description={`${location.coord.lat}, ${location.coord.lon}`}
+                                    image={`https://openweathermap.org/images/flags/${location.sys.country.toLowerCase()}.png`}
+                                    text={`${location.name}, ${location.sys.country}`}
+                                    data-lat={location.coord.lat}
+                                    data-lon={location.coord.lon}
+                                    data-country-code={location.sys.country}
+                                    data-city-name={location.name}
+                                    data-city-id={location.id}
+                                    type="Active"
+                                />
+                            )
+                        })}
 
-            <Input
-                type="Text"
-                icon={<Icon name="search" />}
-                placeholder="Type a city name"
-                showSuggestions
-                noTypeahead={true}
-                onInput={(event)=>setCity(event.target.value)}
-                onChange={()=> refetch()}
-                onSuggestionItemSelect={handleSuggestionItemClick}
-                valueState={data?.length == 0 ? 'Error': 'None'}
-            >
-                {data?.list?.map((location: any) => {
-                    return(
-                        <SuggestionItem
-                            key={location.id}
-                            // additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}
-                            description={`${location.coord.lat}, ${location.coord.lon}`}
-                            image={`https://openweathermap.org/images/flags/${location.sys.country.toLowerCase()}.png`}
-                            text={`${location.name}, ${location.sys.country}`}
-                            data-lat={location.coord.lat}
-                            data-lon={location.coord.lon}
-                            data-country-code={location.sys.country}
-                            data-city-name={location.name}
-                            data-city-id={location.id}
-                            type="Active"
-                        />
-                    )
-                })}
+                        {/*{data?.map((location: any) => {*/}
+                        {/*    return(*/}
+                        {/*        <SuggestionItem*/}
+                        {/*            key={location.id}*/}
+                        {/*            // additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}*/}
+                        {/*            description={`${location.lat}, ${location.lon}`}*/}
+                        {/*            image={`https://openweathermap.org/images/flags/${location.country.toLowerCase()}.png`}*/}
+                        {/*            text={`${location.name}, ${location.country}`}*/}
+                        {/*            data-lat={location.lat}*/}
+                        {/*            data-lon={location.lon}*/}
+                        {/*            data-country-code={location.country}*/}
+                        {/*            data-city-name={location.name}*/}
+                        {/*            data-state-name={location.state}*/}
+                        {/*            data-city-id={location.id}*/}
+                        {/*            type="Active"*/}
+                        {/*        />*/}
+                        {/*    )*/}
+                        {/*})}*/}
+                    </Input>
+                </div>
+            </Grid>
 
-                {/*{data?.map((location: any) => {*/}
-                {/*    return(*/}
-                {/*        <SuggestionItem*/}
-                {/*            key={location.id}*/}
-                {/*            // additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}*/}
-                {/*            description={`${location.lat}, ${location.lon}`}*/}
-                {/*            image={`https://openweathermap.org/images/flags/${location.country.toLowerCase()}.png`}*/}
-                {/*            text={`${location.name}, ${location.country}`}*/}
-                {/*            data-lat={location.lat}*/}
-                {/*            data-lon={location.lon}*/}
-                {/*            data-country-code={location.country}*/}
-                {/*            data-city-name={location.name}*/}
-                {/*            data-state-name={location.state}*/}
-                {/*            data-city-id={location.id}*/}
-                {/*            type="Active"*/}
-                {/*        />*/}
-                {/*    )*/}
-                {/*})}*/}
-            </Input>
         </FlexBox>
     )
 

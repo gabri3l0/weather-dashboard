@@ -44,12 +44,11 @@ export function WeatherDashboard() {
     }
 
     const handleSuggestionItemClick = async (location: any) => {
-        console.log(`location.detail.item.dataset`, location.detail.item.dataset)
-        setLocationSelected(location.detail.item.dataset)
+        setLocationSelected(location)
     }
 
     useEffect(()=>{
-        if (locationSelected?.cityName) refetch()
+        if (locationSelected?.lat) refetch()
     }, [locationSelected])
 
 
@@ -72,7 +71,6 @@ export function WeatherDashboard() {
 
     // console.log(`isPending`, isPending)
     // console.log(`isError`, isError)
-    console.log(`data`, weather)
     // console.log(`error`, error?.message)
 
     return(
@@ -80,6 +78,8 @@ export function WeatherDashboard() {
             <SearchLocation
                 handleSuggestionItemClick={handleSuggestionItemClick}
             />
+            <div>
+        </div>
             <Grid>
                 <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL8 L8 M12 S12'>
                     <Grid>
