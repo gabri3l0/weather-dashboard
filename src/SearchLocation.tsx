@@ -1,49 +1,58 @@
-import {FlexBox, FlexBoxJustifyContent, FlexBoxWrap, Icon, Input, SuggestionItem} from "@ui5/webcomponents-react";
+import {
+    FlexBox,
+    FlexBoxJustifyContent,
+    FlexBoxWrap,
+    Icon,
+    Input,
+    Modals,
+    SuggestionItem
+} from "@ui5/webcomponents-react";
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import {spacing} from "@ui5/webcomponents-react-base";
 import {useState} from "react";
-
-type LocationType = {
-    name: string,
-    sys: {country: string},
-    main: {temp: string},
-    coord: {lat: string, lon: string},
-    id: string
-}
+import axios from "axios";
+import {useQuery} from "@tanstack/react-query";
 
 export function SearchLocation({onSuggestionItemSelect}: {onSuggestionItemSelect: any}) {
-    const [locations, setLocations] = useState<Array<LocationType>>([])
+    // TODO view error
+    // const showToast = Modals.useShowToast();
+    const [city, setCity] = useState('')
 
-    // TODO query cities
-    const handleClick = () => {
-        console.log(`QUERY SEARCH CITIES`)
-        const tempData = [
-            {
-                name: 'London',
-                sys: {country: 'GB'},
-                main: {temp: '12'},
-                coord: {lat: '111', lon: '222'},
-                id: "13"
-            },
-            {
-                name: 'London',
-                sys: {country: 'MX'},
-                main: {temp: '12'},
-                coord: {lat: '111', lon: '222'},
-                id: "233"
-            },
-            {
-                name: 'London',
-                sys: {country: 'US'},
-                main: {temp: '12'},
-                coord: {lat: '111', lon: '222'},
-                id: "1323"
+    const findCities = async (city: string) => {
+        const response = await axios.get(
+            "https://jsonplaceholder.typicode.com/posts", {
+                params: {
+                    userId: parseInt(city)
+                }
             }
-        ]
-        setLocations(tempData)
+        );
+        return response.data;
+    };
 
-        // const { isPending, isError, data, error } = response
+    const { isPending, isError, data, error, refetch } = useQuery({
+        queryKey: ['cities', city],
+        queryFn: ()=>findCities(city),
+        staleTime: 0,
+        retry: false,
+        gcTime: 0,
+        enabled: false
+    })
+
+    const handleClick = async (e: any) => {
+        console.log(`QUERY SEARCH CITIES`)
+        await refetch()
     }
+
+    // console.log(`isPending`, isPending)
+    // console.log(`isError`, isError)
+    // console.log(`data`, data)
+    // console.log(`error`, error?.message)
+
+
+    // TODO view error
+    // if (error) showToast({
+    //     children: error?.message
+    // });
 
     return (
         <FlexBox
@@ -51,31 +60,39 @@ export function SearchLocation({onSuggestionItemSelect}: {onSuggestionItemSelect
             wrap={FlexBoxWrap.Wrap}
             style={spacing.sapUiContentPadding}
         >
+
             <Input
                 type="Text"
                 icon={<Icon name="search" />}
                 placeholder="Type a city name"
                 showSuggestions
                 noTypeahead={true}
+                onInput={(event)=>setCity(event.target.value)}
                 onChange={handleClick}
                 onSuggestionItemSelect={onSuggestionItemSelect}
+                valueState={data?.length == 0 ? 'Error': 'None'}
             >
 
-                {locations.map((location) => {
+                {data?.map((location: any) => {
                     return(
                         <SuggestionItem
                             key={location.id}
-                            additionalText={`${location.main.temp} °C`}
-                            description={`${location.coord.lat}, ${location.coord.lon}`}
-                            image={`https://openweathermap.org/images/flags/${location.sys.country.toLowerCase()}.png`}
-                            text={`${location.name}, ${location.sys.country}`}
-                            data-lat={location.coord.lat}
-                            data-lon={location.coord.lon}
-                            data-country-code={location.sys.country}
-                            data-city-name={location.name}
-                            data-city-id={location.id}
+                            text={`${location.title}`}
                             type="Active"
                         />
+                        // <SuggestionItem
+                        //     key={location.id}
+                        //     additionalText={`${location.main.temp} °C`}
+                        //     description={`${location.coord.lat}, ${location.coord.lon}`}
+                        //     image={`https://openweathermap.org/images/flags/${location.sys.country.toLowerCase()}.png`}
+                        //     text={`${location.name}, ${location.sys.country}`}
+                        //     data-lat={location.coord.lat}
+                        //     data-lon={location.coord.lon}
+                        //     data-country-code={location.sys.country}
+                        //     data-city-name={location.name}
+                        //     data-city-id={location.id}
+                        //     type="Active"
+                        // />
                     )
                 })}
             </Input>
