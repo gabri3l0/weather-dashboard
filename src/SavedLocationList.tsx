@@ -4,10 +4,10 @@ import {spacing} from "@ui5/webcomponents-react-base";
 
 type SavedLocationListProps = {
     locations: any,
-    handleItemClick: any,
-    handleDelete: any
+    handleSelectLocationClick: any,
+    handleRemoveLocationClick: any
 }
-export function SavedLocationList({locations, handleItemClick, handleDelete}: SavedLocationListProps) {
+export function SavedLocationList({locations, handleSelectLocationClick, handleRemoveLocationClick}: SavedLocationListProps) {
     return (
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}
@@ -23,8 +23,8 @@ export function SavedLocationList({locations, handleItemClick, handleDelete}: Sa
                            <>
                                <SavedLocationItem
                                    location={location}
-                                   handleDelete={handleDelete}
-                                   handleItemClick={handleItemClick}
+                                   handleSelectLocationClick={handleSelectLocationClick}
+                                   handleRemoveLocationClick={handleRemoveLocationClick}
                                />
                            </>
                         )

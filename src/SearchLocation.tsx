@@ -1,49 +1,65 @@
-import {FlexBox, FlexBoxJustifyContent, FlexBoxWrap, Icon, Input, SuggestionItem} from "@ui5/webcomponents-react";
+import {
+    FlexBox,
+    FlexBoxJustifyContent,
+    FlexBoxWrap,
+    Icon,
+    Input,
+    Modals,
+    SuggestionItem
+} from "@ui5/webcomponents-react";
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import {spacing} from "@ui5/webcomponents-react-base";
 import {useState} from "react";
+import axios from "axios";
+import {useQuery} from "@tanstack/react-query";
 
-type LocationType = {
-    name: string,
-    sys: {country: string},
-    main: {temp: string},
-    coord: {lat: string, lon: string},
-    id: string
-}
+export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionItemClick: any}) {
+    // TODO view error
+    // const showToast = Modals.useShowToast();
+    const [city, setCity] = useState('')
 
-export function SearchLocation({onSuggestionItemSelect}: {onSuggestionItemSelect: any}) {
-    const [locations, setLocations] = useState<Array<LocationType>>([])
-
-    // TODO query cities
-    const handleClick = () => {
-        console.log(`QUERY SEARCH CITIES`)
-        const tempData = [
-            {
-                name: 'London',
-                sys: {country: 'GB'},
-                main: {temp: '12'},
-                coord: {lat: '111', lon: '222'},
-                id: "13"
-            },
-            {
-                name: 'London',
-                sys: {country: 'MX'},
-                main: {temp: '12'},
-                coord: {lat: '111', lon: '222'},
-                id: "233"
-            },
-            {
-                name: 'London',
-                sys: {country: 'US'},
-                main: {temp: '12'},
-                coord: {lat: '111', lon: '222'},
-                id: "1323"
+    const findCities = async (city: string) => {
+        if (city === '') return []
+        const response = await axios.get(
+            "https://openweathermap.org/data/2.5/finds", {
+                params: {
+                    q: city,
+                    appid: "439d4b804bc8187953eb36d2a8c26a02",
+                    units:"metric"
+                }
             }
-        ]
-        setLocations(tempData)
 
-        // const { isPending, isError, data, error } = response
-    }
+            // "http://api.openweathermap.org/geo/1.0/direct", {
+            //     params: {
+            //         q: city,
+            //         appid: "625a5ca7ad433926a04e1614e116217e",
+            //         limit: 5,
+            //         units:"metric"
+            //     }
+            // }
+        );
+        return response.data;
+    };
+
+    const { isPending, isError, data, error, refetch } = useQuery({
+        queryKey: ['cities', city],
+        queryFn: ()=>findCities(city),
+        staleTime: 0,
+        retry: false,
+        // gcTime: 0,
+        enabled: false
+    })
+
+    // console.log(`isPending`, isPending)
+    // console.log(`isError`, isError)
+    // console.log(`data`, data)
+    // console.log(`error`, error?.message)
+
+
+    // TODO view error
+    // if (error) showToast({
+    //     children: error?.message
+    // });
 
     return (
         <FlexBox
@@ -51,21 +67,23 @@ export function SearchLocation({onSuggestionItemSelect}: {onSuggestionItemSelect
             wrap={FlexBoxWrap.Wrap}
             style={spacing.sapUiContentPadding}
         >
+
             <Input
                 type="Text"
                 icon={<Icon name="search" />}
                 placeholder="Type a city name"
                 showSuggestions
                 noTypeahead={true}
-                onChange={handleClick}
-                onSuggestionItemSelect={onSuggestionItemSelect}
+                onInput={(event)=>setCity(event.target.value)}
+                onChange={()=> refetch()}
+                onSuggestionItemSelect={handleSuggestionItemClick}
+                valueState={data?.length == 0 ? 'Error': 'None'}
             >
-
-                {locations.map((location) => {
+                {data?.list?.map((location: any) => {
                     return(
                         <SuggestionItem
                             key={location.id}
-                            additionalText={`${location.main.temp} °C`}
+                            // additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}
                             description={`${location.coord.lat}, ${location.coord.lon}`}
                             image={`https://openweathermap.org/images/flags/${location.sys.country.toLowerCase()}.png`}
                             text={`${location.name}, ${location.sys.country}`}
@@ -78,6 +96,25 @@ export function SearchLocation({onSuggestionItemSelect}: {onSuggestionItemSelect
                         />
                     )
                 })}
+
+                {/*{data?.map((location: any) => {*/}
+                {/*    return(*/}
+                {/*        <SuggestionItem*/}
+                {/*            key={location.id}*/}
+                {/*            // additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}*/}
+                {/*            description={`${location.lat}, ${location.lon}`}*/}
+                {/*            image={`https://openweathermap.org/images/flags/${location.country.toLowerCase()}.png`}*/}
+                {/*            text={`${location.name}, ${location.country}`}*/}
+                {/*            data-lat={location.lat}*/}
+                {/*            data-lon={location.lon}*/}
+                {/*            data-country-code={location.country}*/}
+                {/*            data-city-name={location.name}*/}
+                {/*            data-state-name={location.state}*/}
+                {/*            data-city-id={location.id}*/}
+                {/*            type="Active"*/}
+                {/*        />*/}
+                {/*    )*/}
+                {/*})}*/}
             </Input>
         </FlexBox>
     )
