@@ -4,8 +4,8 @@ import deleteIcon from '@ui5/webcomponents-icons/dist/delete.js';
 
 type SavedLocationItemProps = {
     location: LocationType,
-    handleRemoveLocationClick: any,
-    handleSelectLocationClick: any,
+    handleRemoveLocationClick: (cityId: string)=> void,
+    handleSelectLocationClick: (location: LocationType)=> void,
 }
 
 export type LocationType = {

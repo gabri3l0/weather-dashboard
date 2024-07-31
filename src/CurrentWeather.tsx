@@ -14,12 +14,12 @@ import heartIcon from '@ui5/webcomponents-icons/dist/heart.js';
 
 type CurrentWeatherProps =
     {
-        weather: WeatherType,
-        handleSaveLocationClick: any,
+        weather: LocationWithWeatherType,
+        handleSaveLocationClick: (weather: LocationWithWeatherType)=> void,
         isLocationSaved: boolean
     }
 
-type WeatherType ={
+export type LocationWithWeatherType ={
     cityName: string,
     countryCode: string,
     current: {
@@ -29,6 +29,9 @@ type WeatherType ={
         }]
     },
     timezone?: string,
+    cityId?: string,
+    lat?: string,
+    lon?: string,
 }
 
 // WEATHER

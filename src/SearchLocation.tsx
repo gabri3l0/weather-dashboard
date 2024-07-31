@@ -14,14 +14,14 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import locateMeIcon from '@ui5/webcomponents-icons/dist/locate-me.js';
+import {LocationType} from "./SavedLocationItem.tsx";
 
 type devicePositionType = {
     lat?: string,
     lon?: string
 }
 
-export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionItemClick: any}) {
-    // TODO view error
+export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionItemClick: (location: LocationType)=>void,}) {
     const showToast = Modals.useShowToast();
     const [city, setCity] = useState('')
     const [devicePosition, setDevicePosition] = useState<devicePositionType>()
@@ -127,7 +127,6 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
     // console.log(`error`, error?.message)
 
 
-    // TODO view error
     if (error) showToast({
         children: error?.message
     });
@@ -152,7 +151,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                         noTypeahead={true}
                         onInput={(event)=>setCity(event.target.value)}
                         onChange={()=> refetch()}
-                        onSuggestionItemSelect={(event)=>handleSuggestionItemClick(event.detail.item.dataset)}
+                        onSuggestionItemSelect={(event)=>handleSuggestionItemClick(event.detail.item.dataset as LocationType)}
                         valueState={data?.length == 0 ? 'Error': 'None'}
                     >
                         {data?.list?.map((location: any) => {

@@ -4,8 +4,8 @@ import {spacing} from "@ui5/webcomponents-react-base";
 
 type SavedLocationListProps = {
     locations: Array<LocationType>,
-    handleSelectLocationClick: any,
-    handleRemoveLocationClick: any
+    handleRemoveLocationClick: (cityId: string)=> void,
+    handleSelectLocationClick: (location: LocationType)=> void,
 }
 
 export function SavedLocationList({locations, handleSelectLocationClick, handleRemoveLocationClick}: SavedLocationListProps) {

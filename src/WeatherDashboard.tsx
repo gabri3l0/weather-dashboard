@@ -1,17 +1,18 @@
 import {SearchLocation} from "./SearchLocation.tsx";
-import {CurrentWeather} from "./CurrentWeather.tsx";
+import {CurrentWeather, LocationWithWeatherType} from "./CurrentWeather.tsx";
 import {ForecastedWeather} from "./ForecastedWeather.tsx";
 import {SavedLocationList} from "./SavedLocationList.tsx";
 import {Grid} from "@ui5/webcomponents-react";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
+import {LocationType} from "./SavedLocationItem.tsx";
 
 
 export function WeatherDashboard() {
-    const [savedLocations, setSavedLocations] = useState<Array<any>>([])
+    const [savedLocations, setSavedLocations] = useState<Array<LocationType>>([])
     const [isLocationSaved, setIsLocationSaved] = useState(false)
-    const [locationSelected, setLocationSelected] = useState({})
+    const [locationSelected, setLocationSelected] = useState<LocationType>()
 
     const getWeather = async (location: any) => {
         console.log(`location`, location)
@@ -43,7 +44,7 @@ export function WeatherDashboard() {
         ...data
     }
 
-    const handleSuggestionItemClick = async (location: any) => {
+    const handleSuggestionItemClick = async (location: LocationType) => {
         setLocationSelected(location)
     }
 
@@ -52,21 +53,21 @@ export function WeatherDashboard() {
     }, [locationSelected])
 
 
-    const handleSelectLocationClick = (location: any) => {
+    const handleSelectLocationClick = (location: LocationType) => {
         setLocationSelected(location)
     }
 
     const handleRemoveLocationClick = (cityId: string) => {
-        setSavedLocations(savedLocations.filter((location: any) => location.cityId !== cityId))
+        setSavedLocations(savedLocations.filter((location) => location.cityId !== cityId))
     }
 
-    const handleSaveLocationClick = (location: any) => {
-        if (!isLocationSaved) setSavedLocations([location, ...savedLocations])
-        else handleRemoveLocationClick(location.cityId)
+    const handleSaveLocationClick = (location: LocationWithWeatherType) => {
+        if (!isLocationSaved) setSavedLocations([location as LocationType, ...savedLocations])
+        else handleRemoveLocationClick(location.cityId as string)
     }
 
     useEffect(()=> {
-        setIsLocationSaved(!!savedLocations.find((savedLocation: any) => savedLocation.cityId === weather.cityId))
+        setIsLocationSaved(!!savedLocations.find((savedLocation) => savedLocation.cityId === weather.cityId))
     }, [savedLocations, weather])
 
     // console.log(`isPending`, isPending)
