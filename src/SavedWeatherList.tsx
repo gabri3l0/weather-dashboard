@@ -1,6 +1,7 @@
-import {List} from "@ui5/webcomponents-react";
+import {Card, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, List} from "@ui5/webcomponents-react";
 import {useState} from "react";
 import {SavedWeatherItem} from "./SavedWeatherItem.tsx";
+import {spacing} from "@ui5/webcomponents-react-base";
 
 export type LocationType = {
     id: string,
@@ -56,21 +57,27 @@ export function SavedWeatherList() {
     }
 
     return (
-        <>
-            <List
-                headerText="Saved Location List"
-            >
-                {locationList.map((location)=> {
-                    return (
-                       <>
-                           <SavedWeatherItem
-                               location={location}
-                               handleDelete={handleDelete}
-                               handleItemClick={handleItemClick}/>
-                       </>
-                    )
-                })}
-            </List>
-        </>
+        <FlexBox
+            justifyContent={FlexBoxJustifyContent.Center}
+            wrap={FlexBoxWrap.Wrap}
+            style={spacing.sapUiContentPadding}
+        >
+            <Card>
+                <List
+                    headerText="Saved Location List"
+                >
+                    {locationList.map((location)=> {
+                        return (
+                           <>
+                               <SavedWeatherItem
+                                   location={location}
+                                   handleDelete={handleDelete}
+                                   handleItemClick={handleItemClick}/>
+                           </>
+                        )
+                    })}
+                </List>
+            </Card>
+        </FlexBox>
     )
 }

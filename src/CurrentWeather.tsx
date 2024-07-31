@@ -1716,8 +1716,7 @@ const weather = {
     ]
 }
 export function CurrentWeather() {
-    const locationDate = new Date().toLocaleString('en-US', { timeZone: weather.timezone })
-    console.log(locationDate)
+    const date = new Date().toLocaleString('en-US', { timeZone: weather.timezone })
 
     return (
         <FlexBox
@@ -1745,7 +1744,7 @@ export function CurrentWeather() {
                         >
                             Monterrey, MX
                         </Text>
-                        <Text>{locationDate}</Text>
+                        <Text>{date}</Text>
                     </div>
                     <Text>
                         <img
