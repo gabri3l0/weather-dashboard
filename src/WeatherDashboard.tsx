@@ -3,7 +3,7 @@ import {CurrentWeather} from "./CurrentWeather.tsx";
 import {ForecastedWeather} from "./ForecastedWeather.tsx";
 import {SavedLocationList} from "./SavedLocationList.tsx";
 import {Grid} from "@ui5/webcomponents-react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 
 export function WeatherDashboard() {
@@ -22,7 +22,7 @@ export function WeatherDashboard() {
 
     const handleClick = (location: any) => {
         if (!isLocationSaved) setSavedLocations([location, ...savedLocations])
-        // else handleDelete(location.cityId)
+        else handleDelete(location.cityId)
     }
 
 
@@ -375,13 +375,15 @@ export function WeatherDashboard() {
                     "uvi": 13
                 }]
         })
-        // TODO bad trigger
-        setIsLocationSaved(!!savedLocations.find((savedLocation: any) => savedLocation.cityId === location.cityId))
     }
 
     const onSuggestionItemSelect = (location: any) => {
         getWeather(location.detail.item.dataset)
     }
+
+    useEffect(()=> {
+        setIsLocationSaved(!!savedLocations.find((savedLocation: any) => savedLocation.cityId === weather.cityId))
+    }, [savedLocations, weather])
 
     return(
         <>
