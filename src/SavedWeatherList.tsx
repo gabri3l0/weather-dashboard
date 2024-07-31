@@ -8,7 +8,6 @@ type SavedWeatherListProps = {
     handleDelete: any
 }
 export function SavedWeatherList({locations, handleItemClick, handleDelete}: SavedWeatherListProps) {
-    if (locations.lengt < 1) return
     return (
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}
