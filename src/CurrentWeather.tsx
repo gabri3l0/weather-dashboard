@@ -9,8 +9,9 @@ import {
 } from "@ui5/webcomponents-react";
 import {spacing} from "@ui5/webcomponents-react-base";
 import heart2Icon from '@ui5/webcomponents-icons/dist/heart-2.js';
+import heartIcon from '@ui5/webcomponents-icons/dist/heart.js';
 
-export function CurrentWeather({weather, handleClick}: {weather: any, handleClick:any}) {
+export function CurrentWeather({weather, handleClick, isLocationSaved}: {weather: any, handleClick:any, isLocationSaved: boolean}) {
     if (!weather?.current) return
 
     const date = new Date().toLocaleString('en-US', { timeZone: weather.timezone })
@@ -52,8 +53,8 @@ export function CurrentWeather({weather, handleClick}: {weather: any, handleClic
                     </Text>
                     <Text>{weather.current.temp} °C</Text>
                     <Button
-                        design="Transparent"
-                        icon={heart2Icon}
+                        design={isLocationSaved ? "Negative" : "Transparent"}
+                        icon={isLocationSaved ? heartIcon : heart2Icon}
                         onClick={()=>handleClick(weather)}
                     />
                 </FlexBox>

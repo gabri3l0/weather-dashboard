@@ -9,6 +9,7 @@ import {useState} from "react";
 export function WeatherDashboard() {
     const [weather, setWeather] = useState<any>()
     const [savedLocations, setSavedLocations] = useState<Array<any>>([])
+    const [isLocationSaved, setIsLocationSaved] = useState(false)
 
     // TODO rename functionNames
     const handleItemClick = (location: any) => {
@@ -20,8 +21,10 @@ export function WeatherDashboard() {
     }
 
     const handleClick = (location: any) => {
-        setSavedLocations([location, ...savedLocations])
+        if (!isLocationSaved) setSavedLocations([location, ...savedLocations])
+        // else handleDelete(location.cityId)
     }
+
 
     const getWeather = (location: any) => {
         console.log(`QUERY GET CURRENT WEATHER`)
@@ -372,6 +375,8 @@ export function WeatherDashboard() {
                     "uvi": 13
                 }]
         })
+        // TODO bad trigger
+        setIsLocationSaved(!!savedLocations.find((savedLocation: any) => savedLocation.cityId === location.cityId))
     }
 
     const onSuggestionItemSelect = (location: any) => {
@@ -390,6 +395,7 @@ export function WeatherDashboard() {
                             <CurrentWeather
                                 weather={weather}
                                 handleClick={handleClick}
+                                isLocationSaved={isLocationSaved}
                             />
                         </div>
                         <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL12 L12 M12 S12'>
