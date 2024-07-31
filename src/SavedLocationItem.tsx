@@ -4,14 +4,14 @@ import deleteIcon from '@ui5/webcomponents-icons/dist/delete.js';
 
 type PropsType = {
     location: any,
-    handleDelete: any,
-    handleItemClick: any,
+    handleRemoveLocationClick: any,
+    handleSelectLocationClick: any,
 }
-export function SavedLocationItem({location, handleDelete, handleItemClick}: PropsType) {
+export function SavedLocationItem({location, handleRemoveLocationClick, handleSelectLocationClick}: PropsType) {
     return (
         <CustomListItem
             key={location.cityId}
-            onClick={()=>handleItemClick(location)}
+            onClick={()=>handleSelectLocationClick(location)}
             data-lat={location.lat}
             data-lon={location.lon}
         >
@@ -42,7 +42,7 @@ export function SavedLocationItem({location, handleDelete, handleItemClick}: Pro
                 <Button
                     design="Negative"
                     icon={deleteIcon}
-                    onClick={()=>handleDelete(location.cityId)}
+                    onClick={()=>handleRemoveLocationClick(location.cityId)}
                 />
             </FlexBox>
         </CustomListItem>

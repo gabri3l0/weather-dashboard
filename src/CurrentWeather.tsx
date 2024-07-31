@@ -11,7 +11,7 @@ import {spacing} from "@ui5/webcomponents-react-base";
 import heart2Icon from '@ui5/webcomponents-icons/dist/heart-2.js';
 import heartIcon from '@ui5/webcomponents-icons/dist/heart.js';
 
-export function CurrentWeather({weather, handleClick, isLocationSaved}: {weather: any, handleClick:any, isLocationSaved: boolean}) {
+export function CurrentWeather({weather, handleSaveLocationClick, isLocationSaved}: {weather: any, handleSaveLocationClick:any, isLocationSaved: boolean}) {
     if (!weather?.current) return
 
     const date = new Date().toLocaleString('en-US', { timeZone: weather.timezone })
@@ -55,7 +55,7 @@ export function CurrentWeather({weather, handleClick, isLocationSaved}: {weather
                     <Button
                         design={isLocationSaved ? "Negative" : "Transparent"}
                         icon={isLocationSaved ? heartIcon : heart2Icon}
-                        onClick={()=>handleClick(weather)}
+                        onClick={()=>handleSaveLocationClick(weather)}
                     />
                 </FlexBox>
             </Card>

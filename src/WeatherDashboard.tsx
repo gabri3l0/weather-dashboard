@@ -11,20 +11,18 @@ export function WeatherDashboard() {
     const [savedLocations, setSavedLocations] = useState<Array<any>>([])
     const [isLocationSaved, setIsLocationSaved] = useState(false)
 
-    // TODO rename functionNames
-    const handleItemClick = (location: any) => {
+    const handleSelectLocationClick = (location: any) => {
         getWeather(location)
     }
 
-    const handleDelete = (cityId: string) => {
+    const handleRemoveLocationClick = (cityId: string) => {
         setSavedLocations(savedLocations.filter((location: any) => location.cityId !== cityId))
     }
 
-    const handleClick = (location: any) => {
+    const handleSaveLocationClick = (location: any) => {
         if (!isLocationSaved) setSavedLocations([location, ...savedLocations])
-        else handleDelete(location.cityId)
+        else handleRemoveLocationClick(location.cityId)
     }
-
 
     const getWeather = (location: any) => {
         console.log(`QUERY GET CURRENT WEATHER`)
@@ -377,7 +375,8 @@ export function WeatherDashboard() {
         })
     }
 
-    const onSuggestionItemSelect = (location: any) => {
+    const handleSuggestionItemClick = (location: any) => {
+        console.log(`location`, location)
         getWeather(location.detail.item.dataset)
     }
 
@@ -388,7 +387,7 @@ export function WeatherDashboard() {
     return(
         <>
             <SearchLocation
-                onSuggestionItemSelect={onSuggestionItemSelect}
+                handleSuggestionItemClick={handleSuggestionItemClick}
             />
             <Grid>
                 <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL8 L8 M12 S12'>
@@ -396,7 +395,7 @@ export function WeatherDashboard() {
                         <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL12 L12 M12 S12'>
                             <CurrentWeather
                                 weather={weather}
-                                handleClick={handleClick}
+                                handleSaveLocationClick={handleSaveLocationClick}
                                 isLocationSaved={isLocationSaved}
                             />
                         </div>
@@ -410,8 +409,8 @@ export function WeatherDashboard() {
                 <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL4 L4 M12 S12'>
                     <SavedLocationList
                         locations={savedLocations}
-                        handleItemClick={handleItemClick}
-                        handleDelete={handleDelete}
+                        handleSelectLocationClick={handleSelectLocationClick}
+                        handleRemoveLocationClick={handleRemoveLocationClick}
                     />
                 </div>
             </Grid>

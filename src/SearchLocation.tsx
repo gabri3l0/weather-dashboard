@@ -13,7 +13,7 @@ import {useState} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 
-export function SearchLocation({onSuggestionItemSelect}: {onSuggestionItemSelect: any}) {
+export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionItemClick: any}) {
     // TODO view error
     // const showToast = Modals.useShowToast();
     const [city, setCity] = useState('')
@@ -37,11 +37,6 @@ export function SearchLocation({onSuggestionItemSelect}: {onSuggestionItemSelect
         gcTime: 0,
         enabled: false
     })
-
-    const handleClick = async (e: any) => {
-        console.log(`QUERY SEARCH CITIES`)
-        await refetch()
-    }
 
     // console.log(`isPending`, isPending)
     // console.log(`isError`, isError)
@@ -68,8 +63,8 @@ export function SearchLocation({onSuggestionItemSelect}: {onSuggestionItemSelect
                 showSuggestions
                 noTypeahead={true}
                 onInput={(event)=>setCity(event.target.value)}
-                onChange={handleClick}
-                onSuggestionItemSelect={onSuggestionItemSelect}
+                onChange={()=> refetch()}
+                onSuggestionItemSelect={handleSuggestionItemClick}
                 valueState={data?.length == 0 ? 'Error': 'None'}
             >
 
