@@ -19,14 +19,8 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
     const [city, setCity] = useState('')
 
     const findCities = async (city: string) => {
+        if (city === '') return []
         const response = await axios.get(
-            // "https://openweathermap.org/data/2.5/finds", {
-            //     params: {
-            //         q: city,
-            //         appid: "439d4b804bc8187953eb36d2a8c26a02",
-            //         units:"metric"
-            //     }
-            // }
             "https://openweathermap.org/data/2.5/finds", {
                 params: {
                     q: city,
@@ -34,6 +28,15 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                     units:"metric"
                 }
             }
+
+            // "http://api.openweathermap.org/geo/1.0/direct", {
+            //     params: {
+            //         q: city,
+            //         appid: "625a5ca7ad433926a04e1614e116217e",
+            //         limit: 5,
+            //         units:"metric"
+            //     }
+            // }
         );
         return response.data;
     };
@@ -43,7 +46,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
         queryFn: ()=>findCities(city),
         staleTime: 0,
         retry: false,
-        gcTime: 0,
+        // gcTime: 0,
         enabled: false
     })
 
@@ -76,12 +79,11 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                 onSuggestionItemSelect={handleSuggestionItemClick}
                 valueState={data?.length == 0 ? 'Error': 'None'}
             >
-
                 {data?.list?.map((location: any) => {
                     return(
                         <SuggestionItem
                             key={location.id}
-                            additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}
+                            // additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}
                             description={`${location.coord.lat}, ${location.coord.lon}`}
                             image={`https://openweathermap.org/images/flags/${location.sys.country.toLowerCase()}.png`}
                             text={`${location.name}, ${location.sys.country}`}
@@ -94,6 +96,25 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                         />
                     )
                 })}
+
+                {/*{data?.map((location: any) => {*/}
+                {/*    return(*/}
+                {/*        <SuggestionItem*/}
+                {/*            key={location.id}*/}
+                {/*            // additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}*/}
+                {/*            description={`${location.lat}, ${location.lon}`}*/}
+                {/*            image={`https://openweathermap.org/images/flags/${location.country.toLowerCase()}.png`}*/}
+                {/*            text={`${location.name}, ${location.country}`}*/}
+                {/*            data-lat={location.lat}*/}
+                {/*            data-lon={location.lon}*/}
+                {/*            data-country-code={location.country}*/}
+                {/*            data-city-name={location.name}*/}
+                {/*            data-state-name={location.state}*/}
+                {/*            data-city-id={location.id}*/}
+                {/*            type="Active"*/}
+                {/*        />*/}
+                {/*    )*/}
+                {/*})}*/}
             </Input>
         </FlexBox>
     )

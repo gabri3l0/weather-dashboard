@@ -34,7 +34,7 @@ export function WeatherDashboard() {
         queryFn: ()=>getWeather(locationSelected),
         staleTime: 0,
         retry: false,
-        gcTime: 0,
+        // gcTime: 0,
         enabled: false
     })
 
