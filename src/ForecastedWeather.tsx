@@ -1,3 +1,5 @@
+import {Card, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, Text} from "@ui5/webcomponents-react";
+import {spacing} from "@ui5/webcomponents-react-base";
 
 
 export function ForecastedWeather() {
@@ -319,17 +321,38 @@ export function ForecastedWeather() {
         }
     ]
     return (
-        <>
+        <FlexBox
+            justifyContent="SpaceAround"
+            wrap={FlexBoxWrap.Wrap}
+        >
             {currentWeather.slice(1,6).map(weather => {
-
+                const dayName = new Date(weather.dt * 1000).toLocaleString('en-us', {weekday:'long'})
                 return(
-                    <img
-                        alt='weather'
-                        src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-                        style={{width: "6em"}}
-                    />
+                    <Card
+                        style={{ width: "25%", ...spacing.sapUiContentPadding }}
+                    >
+                        <FlexBox
+                            justifyContent={FlexBoxJustifyContent.Center}
+                            wrap={FlexBoxWrap.Wrap}
+                            style={spacing.sapUiContentPadding}
+                        >
+                            <Text style={{fontWeight: 'bold', fontSize:"1.2em", ...spacing.sapUiContentPadding}}>
+                                {dayName}
+                            </Text>
+                            <Text>
+                                <img
+                                    alt='weather'
+                                    src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+                                    style={{width: "6em"}}
+                                />
+                            </Text>
+                            <Text style={{fontWeight: 'bold'}}>
+                                {`${weather.temp.min}°C / ${weather.temp.max}°C`}
+                            </Text>
+                        </FlexBox>
+                    </Card>
                 )
             })}
-        </>
+        </FlexBox>
     )
 }

@@ -3,6 +3,7 @@ import { Avatar, ShellBar } from '@ui5/webcomponents-react';
 import { SavedWeatherList } from "./SavedWeatherList.tsx";
 import {SearchLocation} from "./SearchLocation.tsx";
 import {CurrentWeather} from "./CurrentWeather.tsx";
+import {ForecastedWeather} from "./ForecastedWeather.tsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         />
         <SearchLocation/>
         <CurrentWeather/>
+        <ForecastedWeather/>
         <SavedWeatherList/>
     </>
   );
