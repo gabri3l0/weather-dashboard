@@ -63,6 +63,11 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
         await responseFindCities.refetch()
     }
 
+    const handleSelectItem = (event: any) =>{
+        setCityToSearch('');
+        handleSuggestionItemClick(event.detail.item.dataset as LocationType)
+    }
+
 
     if (responseFindCities.error) showToast({
         children: responseFindCities.error?.message
@@ -75,9 +80,10 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
             placeholder="Type a city name"
             showSuggestions
             noTypeahead={true}
+            value={cityToSearch}
             onInput={(event)=>setCityToSearch(event.target.value)}
             onChange={onSubmit}
-            onSuggestionItemSelect={(event)=>handleSuggestionItemClick(event.detail.item.dataset as LocationType)}
+            onSuggestionItemSelect={handleSelectItem}
             valueState={(cities?.length == 0 && !responseFindCities.isPending) ? 'Error': 'None'}
             disabled={isGetLocationLoading}
         >
