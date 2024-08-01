@@ -7,6 +7,7 @@ import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import locateMeIcon from '@ui5/webcomponents-icons/dist/locate-me.js';
 import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
+import {customErrorMessage} from "../../utils/customErrorMessage.tsx";
 
 type devicePositionType = {
     lat?: string,
@@ -31,7 +32,7 @@ export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handle
                     lat: devicePosition?.lat,
                     lon: devicePosition?.lon,
                     limit: 1,
-                    appid: "625a5ca7ad433926a04e1614e116217e",
+                    appid: process.env.OPEN_WEATHER_MAP_REVERSE_API_KEY,
                 },
                 timeout: 6000
             }
@@ -61,19 +62,23 @@ export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handle
                     })
                 },
                 (error) => {
-                    setIsGetLocationLoading(true)
+                    setIsGetLocationLoading(false)
                     showToast({
-                        children: error.message
+                        children: customErrorMessage(error.message)
                     })
                 }
             );
         } else {
             setIsGetLocationLoading(false)
             showToast({
-                children: 'Geolocation is not supported by this browser.'
+                children: customErrorMessage('Geolocation is not supported by this browser.')
             })
         }
     };
+
+    useEffect(()=> {
+        handleGetLocation()
+    }, [])
 
     useEffect(()=> {
         if (city && city.length > 0) {

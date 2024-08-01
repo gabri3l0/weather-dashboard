@@ -11,7 +11,7 @@ import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js"
 import "@ui5/webcomponents-fiori/dist/illustrations/NoSavedItems_v1.js"
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import {spacing} from "@ui5/webcomponents-react-base";
-
+import {customErrorMessage} from "./utils/customErrorMessage.tsx";
 
 export function WeatherDashboard() {
     const showToast = Modals.useShowToast();
@@ -28,7 +28,7 @@ export function WeatherDashboard() {
                     lat: location.lat,
                     lon: location.lon,
                     units: 'metric',
-                    appid: '439d4b804bc8187953eb36d2a8c26a02',
+                    appid: process.env.OPEN_WEATHER_MAP_QUERY_API_KEY,
                 },
                 timeout: 6000
             }
@@ -81,7 +81,7 @@ export function WeatherDashboard() {
     }, [savedLocations, weather])
 
     if (error) showToast({
-        children: error?.message
+        children: customErrorMessage(error?.message)
     });
 
     const isDataFetched = (!isPending && !!data)

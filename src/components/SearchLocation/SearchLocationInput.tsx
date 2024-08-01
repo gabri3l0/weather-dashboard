@@ -8,7 +8,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
-
+import {customErrorMessage} from "../../utils/customErrorMessage.tsx";
 
 type Props = {
     isGetLocationLoading: boolean,
@@ -27,7 +27,7 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
             "https://openweathermap.org/data/2.5/finds", {
                 params: {
                     q: cityToSearch,
-                    appid: "439d4b804bc8187953eb36d2a8c26a02",
+                    appid: process.env.OPEN_WEATHER_MAP_QUERY_API_KEY,
                     units: "metric"
                 },
                 timeout: 6000
@@ -64,9 +64,14 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
         await responseFindCities.refetch()
     }
 
+    const handleSelectItem = (event: any) =>{
+        setCityToSearch('');
+        handleSuggestionItemClick(event.detail.item.dataset as LocationType)
+    }
+
 
     if (responseFindCities.error) showToast({
-        children: responseFindCities.error?.message
+        children: customErrorMessage(responseFindCities.error?.message)
     });
 
     return (
@@ -76,9 +81,10 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
             placeholder="Type a city name"
             showSuggestions
             noTypeahead={true}
+            value={cityToSearch}
             onInput={(event)=>setCityToSearch(event.target.value)}
             onChange={onSubmit}
-            onSuggestionItemSelect={(event)=>handleSuggestionItemClick(event.detail.item.dataset as LocationType)}
+            onSuggestionItemSelect={handleSelectItem}
             valueState={(cities?.length == 0 && !responseFindCities.isPending) ? 'Error': 'None'}
             disabled={isGetLocationLoading}
         >

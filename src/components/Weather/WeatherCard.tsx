@@ -5,6 +5,7 @@ import {
 import heart2Icon from '@ui5/webcomponents-icons/dist/heart-2.js';
 import heartIcon from '@ui5/webcomponents-icons/dist/heart.js';
 import {CurrentWeatherProps} from "./Weather.tsx";
+import {roundTemp} from "../../utils/roundTemp.tsx";
 
 
 export function WeatherCard({weather, handleSaveLocationClick, isLocationSaved}: CurrentWeatherProps) {
@@ -29,7 +30,7 @@ export function WeatherCard({weather, handleSaveLocationClick, isLocationSaved}:
                     style={{width: "70%"}}
                 />
             </Text>
-            <Text>{(weather.current.temp).toFixed(0)} °C</Text>
+            <Text>{roundTemp(weather.current.temp)} °C</Text>
             <Button
                 design={isLocationSaved ? "Negative" : "Transparent"}
                 icon={isLocationSaved ? heartIcon : heart2Icon}

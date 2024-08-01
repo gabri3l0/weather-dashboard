@@ -4,10 +4,12 @@ import {
 } from "@ui5/webcomponents-react";
 import {spacing} from "@ui5/webcomponents-react-base";
 import {ForecastedWeatherType} from "./ForecastedWeather.tsx";
+import {roundTemp} from "../../utils/roundTemp.tsx";
+import {timeStampToDate} from "../../utils/timeStampToDate.tsx";
 
 
 export function ForecastedWeatherCard({weather}: {weather: ForecastedWeatherType}) {
-    const dayName = new Date(weather.dt * 1000).toLocaleString('en-us', {weekday:'long'})
+    const dayName = timeStampToDate(weather.dt).toLocaleString('en-us', {weekday:'long'})
     return(
         <FlexBox key={weather.dt}
                  direction="Column"
@@ -22,7 +24,7 @@ export function ForecastedWeatherCard({weather}: {weather: ForecastedWeatherType
                 />
             </Text>
             <Text style={{fontWeight: 'bold'}}>
-                {`${(weather.temp.min).toFixed(0)}°C / ${(weather.temp.max).toFixed(0)}°C`}
+                {`${roundTemp(weather.temp.min)}°C / ${roundTemp(weather.temp.max)}°C`}
             </Text>
             <Text style={{fontWeight: 'bold', fontSize:"1.2em", ...spacing.sapUiContentPadding}}>
                 {dayName}
