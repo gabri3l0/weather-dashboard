@@ -33,11 +33,8 @@ export type LocationWithWeatherType ={
     lon?: string,
 }
 
-// WEATHER
-// CHARTS
-
 export function CurrentWeather({weather, handleSaveLocationClick, isLocationSaved}: CurrentWeatherProps) {
-    const date = new Date().toLocaleString('en-US', { timeZone: weather?.timezone })
+
     return (
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}
@@ -54,36 +51,49 @@ export function CurrentWeather({weather, handleSaveLocationClick, isLocationSave
                         height: '13rem'
                     }}
                 >
-                    {weather?.current ? (
-                        <>
-                            <div>
-                                <Text
-                                    style={{
-                                        display: "block",
-                                        fontWeight: 'bold'
-                                    }}
-                                >
-                                    {weather.cityName}, {weather.countryCode}
-                                </Text>
-                                <Text>{date}</Text>
-                            </div>
-                            <Text>
-                                <img
-                                    alt='weather'
-                                    src={`https://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
-                                    style={{width: "70%"}}
-                                />
-                            </Text>
-                            <Text>{(weather.current.temp).toFixed(0)} °C</Text>
-                            <Button
-                                design={isLocationSaved ? "Negative" : "Transparent"}
-                                icon={isLocationSaved ? heartIcon : heart2Icon}
-                                onClick={()=>handleSaveLocationClick(weather)}
-                            />
-                        </>
-                    ): <IllustratedMessage name="NoData" size="Dot"/>}
+                    {weather?.current ?
+                        <WeatherCard
+                            weather={weather}
+                            handleSaveLocationClick={handleSaveLocationClick}
+                            isLocationSaved={isLocationSaved}
+                        />
+                        :
+                        <IllustratedMessage name="NoData" size="Dot"/>
+                    }
                 </FlexBox>
             </Card>
         </FlexBox>
+    )
+}
+
+function WeatherCard({weather, handleSaveLocationClick, isLocationSaved}: CurrentWeatherProps) {
+    const date = new Date().toLocaleString('en-US', { timeZone: weather?.timezone })
+    return (
+        <>
+            <div>
+                <Text
+                    style={{
+                        display: "block",
+                        fontWeight: 'bold'
+                    }}
+                >
+                    {weather.cityName}, {weather.countryCode}
+                </Text>
+                <Text>{date}</Text>
+            </div>
+            <Text>
+                <img
+                    alt='weather'
+                    src={`https://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
+                    style={{width: "70%"}}
+                />
+            </Text>
+            <Text>{(weather.current.temp).toFixed(0)} °C</Text>
+            <Button
+                design={isLocationSaved ? "Negative" : "Transparent"}
+                icon={isLocationSaved ? heartIcon : heart2Icon}
+                onClick={()=>handleSaveLocationClick(weather)}
+            />
+        </>
     )
 }
