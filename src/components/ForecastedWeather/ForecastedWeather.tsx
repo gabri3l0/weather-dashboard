@@ -24,14 +24,13 @@ export type ForecastedWeatherType = {
 
 export function ForecastedWeather({forecastedWeather}: ForecastedWeatherProps) {
     return (
-        <FlexBox
-            // justifyContent="SpaceAround"
-            // style={{ height: 'fit-content'}}
-        >
-            <Card style={{height: "10rem", ...spacing.sapUiContentPadding }}>
+        <FlexBox>
+            <Card style={{height: "11.5rem", ...spacing.sapUiContentPadding, overflowX: 'auto'}}>
                 <FlexBox justifyContent="SpaceAround">
                     {forecastedWeather ? (
-                        <>
+                        <FlexBox
+                            style={{overflowX: 'auto'}}
+                        >
                             {forecastedWeather?.slice(1,6).map((weather) => {
                                 return (
                                     <div key={weather.dt}>
@@ -39,7 +38,7 @@ export function ForecastedWeather({forecastedWeather}: ForecastedWeatherProps) {
                                     </div>
                                 )
                             })}
-                        </>
+                        </FlexBox>
                     ): <IllustratedMessage name="NoData" size="Base"/>}
                 </FlexBox>
             </Card>

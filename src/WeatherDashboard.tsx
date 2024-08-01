@@ -79,8 +79,6 @@ export function WeatherDashboard() {
             <SearchLocation
                 handleSuggestionItemClick={handleSuggestionItemClick}
             />
-            <div>
-        </div>
             <Grid>
                 <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL8 L8 M12 S12'>
                     <Grid>

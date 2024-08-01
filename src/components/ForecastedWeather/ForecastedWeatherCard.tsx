@@ -1,5 +1,5 @@
 import {
-    FlexBox,
+    FlexBox, FlexBoxJustifyContent, FlexBoxWrap,
     Text
 } from "@ui5/webcomponents-react";
 import {spacing} from "@ui5/webcomponents-react-base";
@@ -12,6 +12,7 @@ export function ForecastedWeatherCard({weather}: {weather: ForecastedWeatherType
         <FlexBox key={weather.dt}
                  direction="Column"
                  alignItems="Center"
+                 style={spacing.sapUiContentPadding}
         >
             <Text>
                 <img
