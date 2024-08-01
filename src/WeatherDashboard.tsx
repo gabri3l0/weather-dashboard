@@ -29,11 +29,7 @@ export function WeatherDashboard() {
         [locationSelected, data]
     );
 
-
-    const handleSuggestionItemClick = async (location: LocationType) => {
-        setLocationSelected(location)
-    }
-
+    
     const handleSelectLocationClick = (location: LocationType) => {
         setLocationSelected(location)
     }
@@ -74,7 +70,7 @@ export function WeatherDashboard() {
     return(
         <>
             <SearchLocation
-                handleSuggestionItemClick={handleSuggestionItemClick}
+                handleSuggestionItemClick={handleSelectLocationClick}
             />
             {isLoading && (
                 <FlexBox
