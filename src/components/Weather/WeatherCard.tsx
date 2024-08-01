@@ -13,12 +13,7 @@ export function WeatherCard({weather, handleSaveLocationClick, isLocationSaved}:
     return (
         <>
             <div>
-                <Text
-                    style={{
-                        display: "block",
-                        fontWeight: 'bold'
-                    }}
-                >
+                <Text style={{display: "block", fontWeight: 'bold'}}>
                     {weather.cityName}, {weather.countryCode}
                 </Text>
                 <Text>{date}</Text>
