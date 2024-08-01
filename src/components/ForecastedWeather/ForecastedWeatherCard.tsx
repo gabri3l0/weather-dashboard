@@ -5,10 +5,11 @@ import {
 import {spacing} from "@ui5/webcomponents-react-base";
 import {ForecastedWeatherType} from "./ForecastedWeather.tsx";
 import {roundTemp} from "../../utils/roundTemp.tsx";
+import {timeStampToDate} from "../../utils/timeStampToDate.tsx";
 
 
 export function ForecastedWeatherCard({weather}: {weather: ForecastedWeatherType}) {
-    const dayName = new Date(weather.dt * 1000).toLocaleString('en-us', {weekday:'long'})
+    const dayName = timeStampToDate(weather.dt).toLocaleString('en-us', {weekday:'long'})
     return(
         <FlexBox key={weather.dt}
                  direction="Column"
