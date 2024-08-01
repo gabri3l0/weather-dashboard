@@ -1,5 +1,5 @@
 import {
-    FlexBox,
+    FlexBox, FlexBoxAlignItems, FlexBoxDirection,
     Text
 } from "@ui5/webcomponents-react";
 import {spacing} from "@ui5/webcomponents-react-base";
@@ -12,8 +12,8 @@ export function ForecastedWeatherCard({weather}: {weather: ForecastedWeatherType
     const dayName = timeStampToDate(weather.dt).toLocaleString('en-us', {weekday:'long'})
     return(
         <FlexBox key={weather.dt}
-                 direction="Column"
-                 alignItems="Center"
+                 direction={FlexBoxDirection.Column}
+                 alignItems={FlexBoxAlignItems.Center}
                  style={spacing.sapUiContentPadding}
         >
             <Text>

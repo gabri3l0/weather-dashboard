@@ -34,45 +34,32 @@ export type LocationWithWeatherType ={
 
 export function Weather({weather, handleSaveLocationClick, isLocationSaved}: CurrentWeatherProps) {
     return (
-        <FlexBox
-            justifyContent={FlexBoxJustifyContent.Center}
-            wrap={FlexBoxWrap.Wrap}
-        >
-            <Card
-                style={spacing.sapUiContentPadding }
-            >
+        <FlexBox justifyContent={FlexBoxJustifyContent.Center} wrap={FlexBoxWrap.Wrap}>
+            <Card style={spacing.sapUiContentPadding }>
                 <FlexBox
-                    justifyContent="SpaceAround"
+                    justifyContent={FlexBoxJustifyContent.SpaceAround}
                     alignItems={FlexBoxAlignItems.Center}
-                    style={{
-                        width: '100%',
-                        height: '5rem'
-                    }}
+                    style={{width: '100%', height: '5rem'}}
                 >
                     {weather?.current ?
                         (
-                            <>
-                                <WeatherCard
-                                    weather={weather}
-                                    handleSaveLocationClick={handleSaveLocationClick}
-                                    isLocationSaved={isLocationSaved}
-                                />
-                            </>
+                            <WeatherCard
+                                weather={weather}
+                                handleSaveLocationClick={handleSaveLocationClick}
+                                isLocationSaved={isLocationSaved}
+                            />
                         )
                         :
                         <IllustratedMessage name="NoData" size="Dot"/>
                     }
                 </FlexBox>
                 <FlexBox
-                    justifyContent="SpaceAround"
+                    justifyContent={FlexBoxJustifyContent.SpaceAround}
                     alignItems={FlexBoxAlignItems.Center}
-                    style={{
-                        width: '100%',
-                    }}
+                    style={{width: '100%',}}
                 >
-                <WeatherLineChart weather={weather.hourly}/>
+                    <WeatherLineChart weather={weather.hourly}/>
                 </FlexBox>
-
             </Card>
         </FlexBox>
     )

@@ -29,13 +29,14 @@ export function WeatherDashboard() {
         [locationSelected, data]
     );
 
-    
+
     const handleSelectLocationClick = (location: LocationType) => {
         setLocationSelected(location)
     }
 
     const handleRemoveLocationClick = (cityId: string) => {
-        setSavedLocations(savedLocations.filter((location) => location.cityId !== cityId))
+        const updatedLocations = savedLocations.filter((location) => location.cityId !== cityId)
+        setSavedLocations(updatedLocations)
     }
 
     const handleSaveLocationClick = (location: LocationWithWeatherType) => {
@@ -44,7 +45,8 @@ export function WeatherDashboard() {
     }
 
     useEffect(()=> {
-        setIsLocationSaved(!!savedLocations.find((savedLocation) => savedLocation.cityId === weather.cityId))
+        const isLocationInCurrentList = !!savedLocations.find((savedLocation) => savedLocation.cityId === weather.cityId)
+        setIsLocationSaved(isLocationInCurrentList)
     }, [savedLocations, weather])
 
     useEffect(()=>{
@@ -69,20 +71,14 @@ export function WeatherDashboard() {
 
     return(
         <>
-            <SearchLocation
-                handleSuggestionItemClick={handleSelectLocationClick}
-            />
+            <SearchLocation handleSuggestionItemClick={handleSelectLocationClick}/>
             {isLoading && (
                 <FlexBox
                     justifyContent={FlexBoxJustifyContent.Center}
                     wrap={FlexBoxWrap.Wrap}
                     style={spacing.sapUiContentPadding}
                 >
-                    <BusyIndicator
-                        active={isLoading}
-                        delay={0}
-                        size="Large"
-                    />
+                    <BusyIndicator active={isLoading} delay={0} size="Large"/>
                 </FlexBox>
             )}
             <Grid>
