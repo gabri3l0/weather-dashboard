@@ -1,13 +1,11 @@
 import {
     Button,
-    Modals,
 } from "@ui5/webcomponents-react";
 import {useEffect, useState} from "react";
-import axios from "axios";
-import {useQuery} from "@tanstack/react-query";
 import locateMeIcon from '@ui5/webcomponents-icons/dist/locate-me.js';
 import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
-import {customErrorMessage} from "../../utils/customErrorMessage.tsx";
+import {useGetCity} from "../../services/useGetCity.tsx";
+import {useShowToast} from "../utils/useShowToast.tsx";
 
 type devicePositionType = {
     lat?: string,
@@ -21,34 +19,9 @@ type Props = {
 }
 
 export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handleSuggestionItemClick}: Props) {
-    const showToast = Modals.useShowToast();
     const [devicePosition, setDevicePosition] = useState<devicePositionType>()
-
-    const getCity = async () => {
-        if (!devicePosition?.lon) return []
-        const response = await axios.get(
-            "http://api.openweathermap.org/geo/1.0/reverse", {
-                params: {
-                    lat: devicePosition?.lat,
-                    lon: devicePosition?.lon,
-                    limit: 1,
-                    appid: process.env.OPEN_WEATHER_MAP_REVERSE_API_KEY,
-                },
-                timeout: 6000
-            }
-        );
-        return response.data;
-    };
-
-    const responseGetCity = useQuery({
-        queryKey: ['location'],
-        queryFn: ()=>getCity(),
-        staleTime: 0,
-        retry: false,
-        enabled: false
-    });
-
-    const city = responseGetCity?.data ?? []
+    const {data, refetch} = useGetCity(devicePosition)
+    const {displayErrorToast} = useShowToast()
 
 
     const handleGetLocation = () => {
@@ -63,16 +36,12 @@ export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handle
                 },
                 (error) => {
                     setIsGetLocationLoading(false)
-                    showToast({
-                        children: customErrorMessage(error.message)
-                    })
+                    displayErrorToast(error.message)
                 }
             );
         } else {
             setIsGetLocationLoading(false)
-            showToast({
-                children: customErrorMessage('Geolocation is not supported by this browser.')
-            })
+            displayErrorToast('Geolocation is not supported by this browser.')
         }
     };
 
@@ -81,21 +50,21 @@ export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handle
     }, [])
 
     useEffect(()=> {
-        if (city && city.length > 0) {
+        if (data && data.length > 0) {
             handleSuggestionItemClick({
-                lat: city[0].lat,
-                lon: city[0].lon,
-                countryCode: city[0].country,
-                cityName: city[0].name,
-                cityId: city[0].lat.toString()+city[0].lon.toString(),
+                lat: data[0].lat,
+                lon: data[0].lon,
+                countryCode: data[0].country,
+                cityName: data[0].name,
+                cityId: data[0].lat.toString() + data[0].lon.toString(),
             })
             setIsGetLocationLoading(false)
             setDevicePosition(undefined)
         }
-    }, [city])
+    }, [data])
 
     useEffect(()=> {
-        responseGetCity.refetch()
+        refetch()
     }, [devicePosition])
 
 

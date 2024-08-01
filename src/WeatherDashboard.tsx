@@ -2,67 +2,34 @@ import {SearchLocation} from "./components/SearchLocation/SearchLocation.tsx";
 import {Weather, LocationWithWeatherType} from "./components/Weather/Weather.tsx";
 import {ForecastedWeather} from "./components/ForecastedWeather/ForecastedWeather.tsx";
 import {SavedLocationList} from "./components/SavedLocation/SavedLocationList.tsx";
-import {BusyIndicator, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, Grid, Modals} from "@ui5/webcomponents-react";
-import {useEffect, useState} from "react";
-import axios from "axios";
-import {useQuery} from "@tanstack/react-query";
+import {BusyIndicator, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, Grid} from "@ui5/webcomponents-react";
+import {useEffect, useMemo, useState} from "react";
 import {LocationType} from "./components/SavedLocation/SavedLocationItem.tsx";
 import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js"
 import "@ui5/webcomponents-fiori/dist/illustrations/NoSavedItems_v1.js"
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import {spacing} from "@ui5/webcomponents-react-base";
-import {customErrorMessage} from "./utils/customErrorMessage.tsx";
+import {useGetWeather} from "./services/useGetWeather.tsx";
+import {useShowToast} from "./components/utils/useShowToast.tsx";
 
 export function WeatherDashboard() {
-    const showToast = Modals.useShowToast();
     const [savedLocations, setSavedLocations] = useState<Array<LocationType>>([])
     const [isLocationSaved, setIsLocationSaved] = useState(false)
     const [locationSelected, setLocationSelected] = useState<LocationType>()
     const [isLoading, setIsLoading] = useState(false)
-
-    const getWeather = async (location: any) => {
-        const response = await axios.get(
-            "https://openweathermap.org/data/2.5/onecall",
-            {
-                params: {
-                    lat: location.lat,
-                    lon: location.lon,
-                    units: 'metric',
-                    appid: process.env.OPEN_WEATHER_MAP_QUERY_API_KEY,
-                },
-                timeout: 6000
-            }
-        );
-        return response.data;
-    };
-
-    const { isPending, error, data, refetch } = useQuery({
-        queryKey: ['weather', locationSelected],
-        queryFn: ()=>getWeather(locationSelected),
-        staleTime: 0,
-        retry: false,
-        enabled: false
-    })
+    const { isPending, error, data, refetch } = useGetWeather(locationSelected)
+    const {displayErrorToast} = useShowToast()
 
 
-    const weather = {
-        ...locationSelected,
-        ...data
-    }
+    const weather = useMemo(
+        () => ({
+            ...locationSelected,
+            ...data
+        }),
+        [locationSelected, data]
+    );
 
-
-    const handleSuggestionItemClick = async (location: LocationType) => {
-        setLocationSelected(location)
-    }
-
-    useEffect(()=>{
-        if (locationSelected?.lat) {
-            setIsLoading(true)
-            refetch()
-        }
-    }, [locationSelected])
-
-
+    
     const handleSelectLocationClick = (location: LocationType) => {
         setLocationSelected(location)
     }
@@ -80,9 +47,12 @@ export function WeatherDashboard() {
         setIsLocationSaved(!!savedLocations.find((savedLocation) => savedLocation.cityId === weather.cityId))
     }, [savedLocations, weather])
 
-    if (error) showToast({
-        children: customErrorMessage(error?.message)
-    });
+    useEffect(()=>{
+        if (locationSelected?.lat) {
+            setIsLoading(true)
+            refetch()
+        }
+    }, [locationSelected])
 
     const isDataFetched = (!isPending && !!data)
 
@@ -93,12 +63,14 @@ export function WeatherDashboard() {
         if(isDataFetched) {
             setIsLoading(false)
         }
-    }, [isPending, data, error])
+    }, [isPending, data, error, isLoading])
+
+    if (error) displayErrorToast(error?.message)
 
     return(
         <>
             <SearchLocation
-                handleSuggestionItemClick={handleSuggestionItemClick}
+                handleSuggestionItemClick={handleSelectLocationClick}
             />
             {isLoading && (
                 <FlexBox

@@ -1,14 +1,12 @@
 import {
     Icon,
     Input,
-    Modals,
     SuggestionItem
 } from "@ui5/webcomponents-react";
 import {useEffect, useState} from "react";
-import axios from "axios";
-import {useQuery} from "@tanstack/react-query";
 import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
-import {customErrorMessage} from "../../utils/customErrorMessage.tsx";
+import {useFindCities} from "../../services/useFindCities.tsx";
+import {useShowToast} from "../utils/useShowToast.tsx";
 
 type Props = {
     isGetLocationLoading: boolean,
@@ -17,62 +15,33 @@ type Props = {
 }
 
 export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoading, handleSuggestionItemClick}: Props) {
-    const showToast = Modals.useShowToast();
-    const [cityToSearch, setCityToSearch] = useState('')
+    const [cityName, setCityName] = useState('')
+    const {isPending, data, error, refetch} = useFindCities(cityName)
+    const {displayErrorToast} = useShowToast()
 
+    const handleSelectItem = (event: any) =>{
+        setCityName('');
+        handleSuggestionItemClick(event.detail.item.dataset as LocationType)
+    }
 
-    const findCities = async (cityToSearch: string) => {
-        if (cityToSearch === '') return []
-        const response = await axios.get(
-            "https://openweathermap.org/data/2.5/finds", {
-                params: {
-                    q: cityToSearch,
-                    appid: process.env.OPEN_WEATHER_MAP_QUERY_API_KEY,
-                    units: "metric"
-                },
-                timeout: 6000
-            }
-        );
-        return response.data;
-    };
-
-    const responseFindCities = useQuery({
-        queryKey: ['cities', cityToSearch],
-        queryFn: ()=>findCities(cityToSearch),
-        staleTime: 0,
-        retry: false,
-        enabled: false
-    })
-
-    const cities = responseFindCities?.data?.list ?? responseFindCities?.data
-
-
-    const isDataFetched = (!responseFindCities.isPending && !!responseFindCities.data)
+    const isDataFetched = (!isPending && !!data)
 
     useEffect(()=> {
-        if (responseFindCities.error)
+        if (error)
             setIsSearchInputLoading(false)
 
         if(isDataFetched) {
             setIsSearchInputLoading(false)
         }
-    }, [responseFindCities.isPending, responseFindCities.data, responseFindCities.error])
+    }, [isPending, data, error])
 
-    const onSubmit = async () => {
+    const onSubmit = () => {
         if (!isDataFetched)
             setIsSearchInputLoading(true)
-        await responseFindCities.refetch()
+        refetch()
     }
 
-    const handleSelectItem = (event: any) =>{
-        setCityToSearch('');
-        handleSuggestionItemClick(event.detail.item.dataset as LocationType)
-    }
-
-
-    if (responseFindCities.error) showToast({
-        children: customErrorMessage(responseFindCities.error?.message)
-    });
+    if (error) displayErrorToast(error?.message)
 
     return (
         <Input
@@ -81,14 +50,14 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
             placeholder="Type a city name"
             showSuggestions
             noTypeahead={true}
-            value={cityToSearch}
-            onInput={(event)=>setCityToSearch(event.target.value)}
+            value={cityName}
+            onInput={(event)=>setCityName(event.target.value)}
             onChange={onSubmit}
             onSuggestionItemSelect={handleSelectItem}
-            valueState={(cities?.length == 0 && !responseFindCities.isPending) ? 'Error': 'None'}
+            valueState={(data?.length == 0 && !isPending) ? 'Error': 'None'}
             disabled={isGetLocationLoading}
         >
-            {cities?.map((location: any) => {
+            {data?.map((location: any) => {
                 return(
                     <SuggestionItem
                         key={location.id}
