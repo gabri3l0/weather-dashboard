@@ -1,6 +1,6 @@
 import {
     Card,
-    FlexBox, IllustratedMessage,
+    FlexBox, FlexBoxJustifyContent, IllustratedMessage,
 } from "@ui5/webcomponents-react";
 import {spacing} from "@ui5/webcomponents-react-base";
 import {ForecastedWeatherCard} from "./ForecastedWeatherCard.tsx";
@@ -26,11 +26,9 @@ export function ForecastedWeather({forecastedWeather}: ForecastedWeatherProps) {
     return (
         <FlexBox>
             <Card style={{height: "11.5rem", ...spacing.sapUiContentPadding, overflowX: 'auto'}}>
-                <FlexBox justifyContent="SpaceAround">
+                <FlexBox justifyContent={FlexBoxJustifyContent.SpaceAround}>
                     {forecastedWeather ? (
-                        <FlexBox
-                            style={{overflowX: 'auto'}}
-                        >
+                        <FlexBox style={{overflowX: 'auto'}}>
                             {forecastedWeather?.slice(1,6).map((weather) => {
                                 return (
                                     <div key={weather.dt}>
