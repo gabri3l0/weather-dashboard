@@ -66,7 +66,7 @@ export function WeatherDashboard() {
         if(isDataFetched) {
             setIsLoading(false)
         }
-    }, [isPending, data, error])
+    }, [isPending, data, error, isLoading])
 
     if (error) showToast({
         children: customErrorMessage(error?.message)
