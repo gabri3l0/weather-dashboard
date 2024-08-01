@@ -4,14 +4,13 @@ import {ForecastedWeather} from "./components/ForecastedWeather/ForecastedWeathe
 import {SavedLocationList} from "./components/SavedLocation/SavedLocationList.tsx";
 import {BusyIndicator, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, Grid, Modals} from "@ui5/webcomponents-react";
 import {useEffect, useState} from "react";
-import axios from "axios";
-import {useQuery} from "@tanstack/react-query";
 import {LocationType} from "./components/SavedLocation/SavedLocationItem.tsx";
 import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js"
 import "@ui5/webcomponents-fiori/dist/illustrations/NoSavedItems_v1.js"
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import {spacing} from "@ui5/webcomponents-react-base";
 import {customErrorMessage} from "./utils/customErrorMessage.tsx";
+import {useGetWeather} from "./services/useGetWeather.tsx";
 
 export function WeatherDashboard() {
     const showToast = Modals.useShowToast();
@@ -19,31 +18,7 @@ export function WeatherDashboard() {
     const [isLocationSaved, setIsLocationSaved] = useState(false)
     const [locationSelected, setLocationSelected] = useState<LocationType>()
     const [isLoading, setIsLoading] = useState(false)
-
-    const getWeather = async (location: any) => {
-        const response = await axios.get(
-            "https://openweathermap.org/data/2.5/onecall",
-            {
-                params: {
-                    lat: location.lat,
-                    lon: location.lon,
-                    units: 'metric',
-                    appid: process.env.OPEN_WEATHER_MAP_QUERY_API_KEY,
-                },
-                timeout: 6000
-            }
-        );
-        return response.data;
-    };
-
-    const { isPending, error, data, refetch } = useQuery({
-        queryKey: ['weather', locationSelected],
-        queryFn: ()=>getWeather(locationSelected),
-        staleTime: 0,
-        retry: false,
-        enabled: false
-    })
-
+    const { isPending, error, data, refetch } = useGetWeather(locationSelected)
 
     const weather = {
         ...locationSelected,
