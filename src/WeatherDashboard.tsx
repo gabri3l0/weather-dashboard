@@ -78,8 +78,7 @@ export function WeatherDashboard() {
                     wrap={FlexBoxWrap.Wrap}
                     style={spacing.sapUiContentPadding}
                 >
-                    <BusyIndicator active={isLoading} delay={0} size="Large"
-                    />
+                    <BusyIndicator active={isLoading} delay={0} size="Large"/>
                 </FlexBox>
             )}
             <Grid>
