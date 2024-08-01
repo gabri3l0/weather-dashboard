@@ -36,7 +36,8 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                     lon: devicePosition?.lon,
                     limit: 1,
                     appid: "625a5ca7ad433926a04e1614e116217e",
-                }
+                },
+                timeout: 2000
             }
         );
         return response.data;
@@ -61,7 +62,8 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                     q: cityToSearch,
                     appid: "439d4b804bc8187953eb36d2a8c26a02",
                     units: "metric"
-                }
+                },
+                timeout: 2000
             }
         );
         return response.data;
@@ -118,24 +120,27 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
         responseGetCity.refetch()
     }, [devicePosition])
 
-
-    if (responseFindCities.error) showToast({
-        children: responseFindCities.error?.message
-    });
-
     const isDataFetched = (!responseFindCities.isPending && !!responseFindCities.data)
 
     useEffect(()=> {
+        if (responseFindCities.error)
+            setIsLoading(false)
+
         if(isDataFetched) {
             setIsLoading(false)
         }
-    }, [responseFindCities.isPending, responseFindCities.data])
+    }, [responseFindCities.isPending, responseFindCities.data, responseFindCities.error])
 
     const onSubmit = async () => {
         if (!isDataFetched)
             setIsLoading(true)
         await responseFindCities.refetch()
     }
+
+
+    if (responseFindCities.error) showToast({
+        children: responseFindCities.error?.message
+    });
 
     return (
         <FlexBox
