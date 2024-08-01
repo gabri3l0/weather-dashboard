@@ -2,23 +2,24 @@ import {SearchLocation} from "./components/SearchLocation/SearchLocation.tsx";
 import {Weather, LocationWithWeatherType} from "./components/Weather/Weather.tsx";
 import {ForecastedWeather} from "./components/ForecastedWeather/ForecastedWeather.tsx";
 import {SavedLocationList} from "./components/SavedLocation/SavedLocationList.tsx";
-import {BusyIndicator, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, Grid, Modals} from "@ui5/webcomponents-react";
+import {BusyIndicator, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, Grid} from "@ui5/webcomponents-react";
 import {useEffect, useMemo, useState} from "react";
 import {LocationType} from "./components/SavedLocation/SavedLocationItem.tsx";
 import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js"
 import "@ui5/webcomponents-fiori/dist/illustrations/NoSavedItems_v1.js"
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import {spacing} from "@ui5/webcomponents-react-base";
-import {customErrorMessage} from "./utils/customErrorMessage.tsx";
 import {useGetWeather} from "./services/useGetWeather.tsx";
+import {useShowToast} from "./components/utils/useShowToast.tsx";
 
 export function WeatherDashboard() {
-    const showToast = Modals.useShowToast();
     const [savedLocations, setSavedLocations] = useState<Array<LocationType>>([])
     const [isLocationSaved, setIsLocationSaved] = useState(false)
     const [locationSelected, setLocationSelected] = useState<LocationType>()
     const [isLoading, setIsLoading] = useState(false)
     const { isPending, error, data, refetch } = useGetWeather(locationSelected)
+    const {displayErrorToast} = useShowToast()
+
 
     const weather = useMemo(
         () => ({
@@ -68,9 +69,7 @@ export function WeatherDashboard() {
         }
     }, [isPending, data, error, isLoading])
 
-    if (error) showToast({
-        children: customErrorMessage(error?.message)
-    });
+    if (error) displayErrorToast(error?.message)
 
     return(
         <>

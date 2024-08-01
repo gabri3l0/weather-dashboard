@@ -1,12 +1,11 @@
 import {
     Button,
-    Modals,
 } from "@ui5/webcomponents-react";
 import {useEffect, useState} from "react";
 import locateMeIcon from '@ui5/webcomponents-icons/dist/locate-me.js';
 import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
-import {customErrorMessage} from "../../utils/customErrorMessage.tsx";
 import {useGetCity} from "../../services/useGetCity.tsx";
+import {useShowToast} from "../utils/useShowToast.tsx";
 
 type devicePositionType = {
     lat?: string,
@@ -20,9 +19,10 @@ type Props = {
 }
 
 export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handleSuggestionItemClick}: Props) {
-    const showToast = Modals.useShowToast();
     const [devicePosition, setDevicePosition] = useState<devicePositionType>()
     const {data, refetch} = useGetCity(devicePosition)
+    const {displayErrorToast} = useShowToast()
+
 
     const handleGetLocation = () => {
         setIsGetLocationLoading(true)
@@ -36,16 +36,12 @@ export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handle
                 },
                 (error) => {
                     setIsGetLocationLoading(false)
-                    showToast({
-                        children: customErrorMessage(error.message)
-                    })
+                    displayErrorToast(error.message)
                 }
             );
         } else {
             setIsGetLocationLoading(false)
-            showToast({
-                children: customErrorMessage('Geolocation is not supported by this browser.')
-            })
+            displayErrorToast('Geolocation is not supported by this browser.')
         }
     };
 

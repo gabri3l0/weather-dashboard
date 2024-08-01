@@ -1,13 +1,12 @@
 import {
     Icon,
     Input,
-    Modals,
     SuggestionItem
 } from "@ui5/webcomponents-react";
 import {useEffect, useState} from "react";
 import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
-import {customErrorMessage} from "../../utils/customErrorMessage.tsx";
 import {useFindCities} from "../../services/useFindCities.tsx";
+import {useShowToast} from "../utils/useShowToast.tsx";
 
 type Props = {
     isGetLocationLoading: boolean,
@@ -16,9 +15,9 @@ type Props = {
 }
 
 export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoading, handleSuggestionItemClick}: Props) {
-    const showToast = Modals.useShowToast();
     const [cityName, setCityName] = useState('')
     const {isPending, data, error, refetch} = useFindCities(cityName)
+    const {displayErrorToast} = useShowToast()
 
     const handleSelectItem = (event: any) =>{
         setCityName('');
@@ -42,9 +41,7 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
         refetch()
     }
 
-    if (error) showToast({
-        children: customErrorMessage(error?.message)
-    });
+    if (error) displayErrorToast(error?.message)
 
     return (
         <Input
