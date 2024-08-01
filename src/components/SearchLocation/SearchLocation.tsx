@@ -14,7 +14,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import locateMeIcon from '@ui5/webcomponents-icons/dist/locate-me.js';
-import {LocationType} from "./SavedLocationItem.tsx";
+import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
 
 type devicePositionType = {
     lat?: string,
@@ -24,7 +24,6 @@ type devicePositionType = {
 export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionItemClick: (location: LocationType)=>void,}) {
     const showToast = Modals.useShowToast();
     const [cityToSearch, setCityToSearch] = useState('')
-    // const [isLoading, setIsLoading] = useState(false)
     const [devicePosition, setDevicePosition] = useState<devicePositionType>()
 
     const getCity = async () => {
@@ -63,15 +62,6 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                     units: "metric"
                 }
             }
-
-            // "http://api.openweathermap.org/geo/1.0/direct", {
-            //     params: {
-            //         q: cityToSearch,
-            //         appid: "625a5ca7ad433926a04e1614e116217e",
-            //         limit: 5,
-            //         units:"metric"
-            //     }
-            // }
         );
         return response.data;
     };
@@ -158,7 +148,6 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                             return(
                                 <SuggestionItem
                                     key={location.id}
-                                    // additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}
                                     description={`${location.coord.lat}, ${location.coord.lon}`}
                                     image={`https://openweathermap.org/images/flags/${location.sys.country.toLowerCase()}.png`}
                                     text={`${location.name}, ${location.sys.country}`}
@@ -171,25 +160,6 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                                 />
                             )
                         })}
-
-                        {/*{cities?.map((location: any) => {*/}
-                        {/*    return(*/}
-                        {/*        <SuggestionItem*/}
-                        {/*            key={location.id}*/}
-                        {/*            // additionalText={`${(location.main.temp-273.15).toFixed(0)} °C`}*/}
-                        {/*            description={`${location.lat}, ${location.lon}`}*/}
-                        {/*            image={`https://openweathermap.org/images/flags/${location.country.toLowerCase()}.png`}*/}
-                        {/*            text={`${location.name}, ${location.country}`}*/}
-                        {/*            data-lat={location.lat}*/}
-                        {/*            data-lon={location.lon}*/}
-                        {/*            data-country-code={location.country}*/}
-                        {/*            data-city-name={location.name}*/}
-                        {/*            data-state-name={location.state}*/}
-                        {/*            data-city-id={location.id}*/}
-                        {/*            type="Active"*/}
-                        {/*        />*/}
-                        {/*    )*/}
-                        {/*})}*/}
                     </Input>
                 </div>
             </Grid>

@@ -1,22 +1,21 @@
-import {SearchLocation} from "./SearchLocation.tsx";
-import {CurrentWeather, LocationWithWeatherType} from "./CurrentWeather.tsx";
-import {ForecastedWeather} from "./ForecastedWeather.tsx";
-import {SavedLocationList} from "./SavedLocationList.tsx";
+import {SearchLocation} from "./components/SearchLocation/SearchLocation.tsx";
+import {CurrentWeather, LocationWithWeatherType} from "./components/CurrentWeather/CurrentWeather.tsx";
+import {ForecastedWeather} from "./components/ForecastedWeather/ForecastedWeather.tsx";
+import {SavedLocationList} from "./components/SavedLocation/SavedLocationList.tsx";
 import {Grid} from "@ui5/webcomponents-react";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
-import {LocationType} from "./SavedLocationItem.tsx";
+import {LocationType} from "./components/SavedLocation/SavedLocationItem.tsx";
 import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js"
 import "@ui5/webcomponents-fiori/dist/illustrations/NoSavedItems_v1.js"
-
+import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 
 
 export function WeatherDashboard() {
     const [savedLocations, setSavedLocations] = useState<Array<LocationType>>([])
     const [isLocationSaved, setIsLocationSaved] = useState(false)
     const [locationSelected, setLocationSelected] = useState<LocationType>()
-    const [isLoading, setIsLoading] = useState(false)
 
     const getWeather = async (location: any) => {
         const response = await axios.get(
@@ -33,7 +32,7 @@ export function WeatherDashboard() {
         return response.data;
     };
 
-    const { isPending, isError, data, error, refetch } = useQuery({
+    const { data, refetch } = useQuery({
         queryKey: ['weather', locationSelected],
         queryFn: ()=>getWeather(locationSelected),
         staleTime: 0,
@@ -50,7 +49,6 @@ export function WeatherDashboard() {
 
 
     const handleSuggestionItemClick = async (location: LocationType) => {
-        setIsLoading(true);
         setLocationSelected(location)
     }
 
@@ -76,11 +74,6 @@ export function WeatherDashboard() {
         setIsLocationSaved(!!savedLocations.find((savedLocation) => savedLocation.cityId === weather.cityId))
     }, [savedLocations, weather])
 
-    useEffect(()=>{
-        if (!isPending) {
-            setIsLoading(false)
-        }
-    }, [isPending])
 
     return(
         <>
