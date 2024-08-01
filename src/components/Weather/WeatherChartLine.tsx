@@ -1,10 +1,11 @@
 import { LineChart } from "@ui5/webcomponents-react-charts";
 import {roundTemp} from "../../utils/roundTemp.tsx";
+import {timeStampToDate} from "../../utils/timeStampToDate.tsx";
 
 
 export function WeatherLineChart({weather}: {weather: Array<any>,}) {
-    const parseDate = (dt: number) =>{
-        const date = new Date(dt * 1000)
+    const dateToHourlyDate = (dt: number) =>{
+        const date = timeStampToDate(dt)
         const day = date.getDate();
         const month = date.toLocaleString('en-US', { month: 'short' });
         const hour = date.getHours()
@@ -14,7 +15,7 @@ export function WeatherLineChart({weather}: {weather: Array<any>,}) {
     const formattedWeatherDataset = weather?.slice(0,18)?.map((weather) => ({
         ...weather,
         temp: roundTemp(weather.temp),
-        formattedDate: parseDate(weather.dt)
+        formattedDate: dateToHourlyDate(weather.dt)
     }));
 
     return (
