@@ -1,4 +1,5 @@
 import {
+    BusyIndicator,
     Button,
     FlexBox,
     FlexBoxJustifyContent,
@@ -8,7 +9,6 @@ import {
     Modals,
     SuggestionItem
 } from "@ui5/webcomponents-react";
-import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import {spacing} from "@ui5/webcomponents-react-base";
 import {useEffect, useState} from "react";
 import axios from "axios";
@@ -25,6 +25,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
     const showToast = Modals.useShowToast();
     const [cityToSearch, setCityToSearch] = useState('')
     const [devicePosition, setDevicePosition] = useState<devicePositionType>()
+    const [isLoading, setIsLoading] = useState(false)
 
     const getCity = async () => {
         if (!devicePosition?.lon) return []
@@ -121,6 +122,18 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
         children: responseFindCities.error?.message
     });
 
+    useEffect(()=> {
+        const isDone = (!responseFindCities.isPending && !!responseFindCities.data)
+        if(isDone) {
+            setIsLoading(false)
+        }
+    }, [responseFindCities.isPending, responseFindCities.data])
+
+    const onSubmit = async () => {
+        setIsLoading(true)
+        await responseFindCities.refetch()
+    }
+
     return (
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}
@@ -140,7 +153,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                         showSuggestions
                         noTypeahead={true}
                         onInput={(event)=>setCityToSearch(event.target.value)}
-                        onChange={()=> responseFindCities.refetch()}
+                        onChange={onSubmit}
                         onSuggestionItemSelect={(event)=>handleSuggestionItemClick(event.detail.item.dataset as LocationType)}
                         valueState={(cities?.length == 0 && !responseFindCities.isPending) ? 'Error': 'None'}
                     >
@@ -161,6 +174,11 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                             )
                         })}
                     </Input>
+                    <BusyIndicator
+                        active={isLoading}
+                        delay={0}
+                        size="Large"
+                    />
                 </div>
             </Grid>
 

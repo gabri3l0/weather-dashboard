@@ -16,7 +16,7 @@ export function SavedLocationList({locations, handleSelectLocationClick, handleR
             style={spacing.sapUiContentPadding}
         >
             <Card
-                style={{height: "26rem"}}
+                style={{height: "27.5rem"}}
             >
                 {locations.length > 0 ? (
                     <List

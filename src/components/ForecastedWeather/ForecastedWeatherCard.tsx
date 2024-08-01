@@ -1,5 +1,5 @@
 import {
-    FlexBox, FlexBoxJustifyContent, FlexBoxWrap,
+    FlexBox,
     Text
 } from "@ui5/webcomponents-react";
 import {spacing} from "@ui5/webcomponents-react-base";
