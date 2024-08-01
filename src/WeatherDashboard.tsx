@@ -3,7 +3,7 @@ import {Weather, LocationWithWeatherType} from "./components/Weather/Weather.tsx
 import {ForecastedWeather} from "./components/ForecastedWeather/ForecastedWeather.tsx";
 import {SavedLocationList} from "./components/SavedLocation/SavedLocationList.tsx";
 import {BusyIndicator, FlexBox, FlexBoxJustifyContent, FlexBoxWrap, Grid, Modals} from "@ui5/webcomponents-react";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {LocationType} from "./components/SavedLocation/SavedLocationItem.tsx";
 import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js"
 import "@ui5/webcomponents-fiori/dist/illustrations/NoSavedItems_v1.js"
@@ -20,10 +20,13 @@ export function WeatherDashboard() {
     const [isLoading, setIsLoading] = useState(false)
     const { isPending, error, data, refetch } = useGetWeather(locationSelected)
 
-    const weather = {
-        ...locationSelected,
-        ...data
-    }
+    const weather = useMemo(
+        () => ({
+            ...locationSelected,
+            ...data
+        }),
+        [locationSelected, data]
+    );
 
 
     const handleSuggestionItemClick = async (location: LocationType) => {
