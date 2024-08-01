@@ -33,14 +33,6 @@ export function WeatherDashboard() {
         setLocationSelected(location)
     }
 
-    useEffect(()=>{
-        if (locationSelected?.lat) {
-            setIsLoading(true)
-            refetch()
-        }
-    }, [locationSelected])
-
-
     const handleSelectLocationClick = (location: LocationType) => {
         setLocationSelected(location)
     }
@@ -58,9 +50,12 @@ export function WeatherDashboard() {
         setIsLocationSaved(!!savedLocations.find((savedLocation) => savedLocation.cityId === weather.cityId))
     }, [savedLocations, weather])
 
-    if (error) showToast({
-        children: customErrorMessage(error?.message)
-    });
+    useEffect(()=>{
+        if (locationSelected?.lat) {
+            setIsLoading(true)
+            refetch()
+        }
+    }, [locationSelected])
 
     const isDataFetched = (!isPending && !!data)
 
@@ -72,6 +67,10 @@ export function WeatherDashboard() {
             setIsLoading(false)
         }
     }, [isPending, data, error])
+
+    if (error) showToast({
+        children: customErrorMessage(error?.message)
+    });
 
     return(
         <>

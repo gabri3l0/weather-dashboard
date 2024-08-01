@@ -20,6 +20,11 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
     const [cityName, setCityName] = useState('')
     const {isPending, data, error, refetch} = useFindCities(cityName)
 
+    const handleSelectItem = (event: any) =>{
+        setCityName('');
+        handleSuggestionItemClick(event.detail.item.dataset as LocationType)
+    }
+
     const isDataFetched = (!isPending && !!data)
 
     useEffect(()=> {
@@ -35,11 +40,6 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
         if (!isDataFetched)
             setIsSearchInputLoading(true)
         refetch()
-    }
-
-    const handleSelectItem = (event: any) =>{
-        setCityName('');
-        handleSuggestionItemClick(event.detail.item.dataset as LocationType)
     }
 
     if (error) showToast({

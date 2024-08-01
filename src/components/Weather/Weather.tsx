@@ -33,7 +33,6 @@ export type LocationWithWeatherType ={
 }
 
 export function Weather({weather, handleSaveLocationClick, isLocationSaved}: CurrentWeatherProps) {
-
     return (
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}
