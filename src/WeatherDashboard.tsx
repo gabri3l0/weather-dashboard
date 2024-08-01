@@ -11,6 +11,7 @@ import "@ui5/webcomponents-fiori/dist/illustrations/NoData.js"
 import "@ui5/webcomponents-fiori/dist/illustrations/NoSavedItems_v1.js"
 import '@ui5/webcomponents/dist/features/InputSuggestions.js';
 import {spacing} from "@ui5/webcomponents-react-base";
+import {customErrorMessage} from "./utils/customErrorMessage.tsx";
 
 export function WeatherDashboard() {
     const showToast = Modals.useShowToast();
@@ -80,7 +81,7 @@ export function WeatherDashboard() {
     }, [savedLocations, weather])
 
     if (error) showToast({
-        children: error?.message
+        children: customErrorMessage(error?.message)
     });
 
     const isDataFetched = (!isPending && !!data)

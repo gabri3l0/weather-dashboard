@@ -8,6 +8,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
+import {customErrorMessage} from "../../utils/customErrorMessage.tsx";
 
 type Props = {
     isGetLocationLoading: boolean,
@@ -70,7 +71,7 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
 
 
     if (responseFindCities.error) showToast({
-        children: responseFindCities.error?.message
+        children: customErrorMessage(responseFindCities.error?.message)
     });
 
     return (

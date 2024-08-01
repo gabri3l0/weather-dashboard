@@ -7,6 +7,7 @@ import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import locateMeIcon from '@ui5/webcomponents-icons/dist/locate-me.js';
 import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
+import {customErrorMessage} from "../../utils/customErrorMessage.tsx";
 
 type devicePositionType = {
     lat?: string,
@@ -63,14 +64,14 @@ export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handle
                 (error) => {
                     setIsGetLocationLoading(true)
                     showToast({
-                        children: error.message
+                        children: customErrorMessage(error.message)
                     })
                 }
             );
         } else {
             setIsGetLocationLoading(false)
             showToast({
-                children: 'Geolocation is not supported by this browser.'
+                children: customErrorMessage('Geolocation is not supported by this browser.')
             })
         }
     };
