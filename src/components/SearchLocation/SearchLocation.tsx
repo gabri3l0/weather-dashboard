@@ -110,6 +110,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                 cityName: city[0].name,
                 cityId: city[0].lat.toString()+city[0].lon.toString(),
             })
+            setDevicePosition(undefined)
         }
     }, [city])
 
@@ -122,15 +123,17 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
         children: responseFindCities.error?.message
     });
 
+    const isDataFetched = (!responseFindCities.isPending && !!responseFindCities.data)
+
     useEffect(()=> {
-        const isDone = (!responseFindCities.isPending && !!responseFindCities.data)
-        if(isDone) {
+        if(isDataFetched) {
             setIsLoading(false)
         }
     }, [responseFindCities.isPending, responseFindCities.data])
 
     const onSubmit = async () => {
-        setIsLoading(true)
+        if (!isDataFetched)
+            setIsLoading(true)
         await responseFindCities.refetch()
     }
 
