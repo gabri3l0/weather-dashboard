@@ -31,7 +31,7 @@ export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handle
                     lat: devicePosition?.lat,
                     lon: devicePosition?.lon,
                     limit: 1,
-                    appid: "625a5ca7ad433926a04e1614e116217e",
+                    appid: process.env.OPEN_WEATHER_MAP_REVERSE_API_KEY,
                 },
                 timeout: 6000
             }

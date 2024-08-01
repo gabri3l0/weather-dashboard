@@ -9,7 +9,6 @@ import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
 
-
 type Props = {
     isGetLocationLoading: boolean,
     setIsSearchInputLoading: any,
@@ -27,7 +26,7 @@ export function SearchLocationInput({isGetLocationLoading, setIsSearchInputLoadi
             "https://openweathermap.org/data/2.5/finds", {
                 params: {
                     q: cityToSearch,
-                    appid: "439d4b804bc8187953eb36d2a8c26a02",
+                    appid: process.env.OPEN_WEATHER_MAP_QUERY_API_KEY,
                     units: "metric"
                 },
                 timeout: 6000
