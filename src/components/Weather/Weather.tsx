@@ -1,17 +1,14 @@
 import {
-    Button,
     Card,
     FlexBox,
     FlexBoxAlignItems,
     FlexBoxJustifyContent,
     FlexBoxWrap, IllustratedMessage,
-    Text
 } from "@ui5/webcomponents-react";
 import {spacing} from "@ui5/webcomponents-react-base";
-import heart2Icon from '@ui5/webcomponents-icons/dist/heart-2.js';
-import heartIcon from '@ui5/webcomponents-icons/dist/heart.js';
+import {WeatherCard} from "./WeatherCard.tsx";
 
-type CurrentWeatherProps =
+export type CurrentWeatherProps =
     {
         weather: LocationWithWeatherType,
         handleSaveLocationClick: (weather: LocationWithWeatherType)=> void,
@@ -33,7 +30,7 @@ export type LocationWithWeatherType ={
     lon?: string,
 }
 
-export function CurrentWeather({weather, handleSaveLocationClick, isLocationSaved}: CurrentWeatherProps) {
+export function Weather({weather, handleSaveLocationClick, isLocationSaved}: CurrentWeatherProps) {
 
     return (
         <FlexBox
@@ -63,37 +60,5 @@ export function CurrentWeather({weather, handleSaveLocationClick, isLocationSave
                 </FlexBox>
             </Card>
         </FlexBox>
-    )
-}
-
-function WeatherCard({weather, handleSaveLocationClick, isLocationSaved}: CurrentWeatherProps) {
-    const date = new Date().toLocaleString('en-US', { timeZone: weather?.timezone })
-    return (
-        <>
-            <div>
-                <Text
-                    style={{
-                        display: "block",
-                        fontWeight: 'bold'
-                    }}
-                >
-                    {weather.cityName}, {weather.countryCode}
-                </Text>
-                <Text>{date}</Text>
-            </div>
-            <Text>
-                <img
-                    alt='weather'
-                    src={`https://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
-                    style={{width: "70%"}}
-                />
-            </Text>
-            <Text>{(weather.current.temp).toFixed(0)} °C</Text>
-            <Button
-                design={isLocationSaved ? "Negative" : "Transparent"}
-                icon={isLocationSaved ? heartIcon : heart2Icon}
-                onClick={()=>handleSaveLocationClick(weather)}
-            />
-        </>
     )
 }

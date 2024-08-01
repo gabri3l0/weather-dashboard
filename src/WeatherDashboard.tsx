@@ -1,5 +1,5 @@
 import {SearchLocation} from "./components/SearchLocation/SearchLocation.tsx";
-import {CurrentWeather, LocationWithWeatherType} from "./components/CurrentWeather/CurrentWeather.tsx";
+import {Weather, LocationWithWeatherType} from "./components/Weather/Weather.tsx";
 import {ForecastedWeather} from "./components/ForecastedWeather/ForecastedWeather.tsx";
 import {SavedLocationList} from "./components/SavedLocation/SavedLocationList.tsx";
 import {Grid} from "@ui5/webcomponents-react";
@@ -37,7 +37,6 @@ export function WeatherDashboard() {
         queryFn: ()=>getWeather(locationSelected),
         staleTime: 0,
         retry: false,
-        // gcTime: 0,
         enabled: false
     })
 
@@ -86,7 +85,7 @@ export function WeatherDashboard() {
                 <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL8 L8 M12 S12'>
                     <Grid>
                         <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL12 L12 M12 S12'>
-                            <CurrentWeather
+                            <Weather
                                 weather={weather}
                                 handleSaveLocationClick={handleSaveLocationClick}
                                 isLocationSaved={isLocationSaved}
