@@ -1,4 +1,5 @@
 import { LineChart } from "@ui5/webcomponents-react-charts";
+import {roundTemp} from "../../utils/roundTemp.tsx";
 
 
 export function WeatherLineChart({weather}: {weather: Array<any>,}) {
@@ -12,7 +13,7 @@ export function WeatherLineChart({weather}: {weather: Array<any>,}) {
 
     const formattedWeatherDataset = weather?.slice(0,18)?.map((weather) => ({
         ...weather,
-        temp: (weather.temp).toFixed(),
+        temp: roundTemp(weather.temp),
         formattedDate: parseDate(weather.dt)
     }));
 
