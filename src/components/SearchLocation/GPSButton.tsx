@@ -62,7 +62,7 @@ export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handle
                     })
                 },
                 (error) => {
-                    setIsGetLocationLoading(true)
+                    setIsGetLocationLoading(false)
                     showToast({
                         children: customErrorMessage(error.message)
                     })
@@ -75,6 +75,10 @@ export function GPSButton({isSearchInputLoading, setIsGetLocationLoading, handle
             })
         }
     };
+
+    useEffect(()=> {
+        handleGetLocation()
+    }, [])
 
     useEffect(()=> {
         if (city && city.length > 0) {
