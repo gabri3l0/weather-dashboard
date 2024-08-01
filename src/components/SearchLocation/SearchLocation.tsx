@@ -37,7 +37,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                     limit: 1,
                     appid: "625a5ca7ad433926a04e1614e116217e",
                 },
-                timeout: 2000
+                timeout: 6000
             }
         );
         return response.data;
@@ -63,7 +63,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                     appid: "439d4b804bc8187953eb36d2a8c26a02",
                     units: "metric"
                 },
-                timeout: 2000
+                timeout: 6000
             }
         );
         return response.data;
