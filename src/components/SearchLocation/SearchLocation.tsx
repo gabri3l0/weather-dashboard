@@ -2,7 +2,7 @@ import {
     BusyIndicator,
     FlexBox,
     FlexBoxJustifyContent,
-    FlexBoxWrap, Grid,
+    FlexBoxWrap
 } from "@ui5/webcomponents-react";
 import {spacing} from "@ui5/webcomponents-react-base";
 import {LocationType} from "../SavedLocation/SavedLocationItem.tsx";
@@ -18,6 +18,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}
             wrap={FlexBoxWrap.Wrap}
+            alignItems="Center"
             style={spacing.sapUiContentPadding}
         >
             <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL12 L12 M12 S12'>
@@ -26,17 +27,19 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                     setIsGetLocationLoading={setIsGetLocationLoading}
                     handleSuggestionItemClick={handleSuggestionItemClick}
                 />
+            </div>
+            <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL12 L12 M12 S12'>
                 <SearchLocationInput
                     isGetLocationLoading={isGetLocationLoading}
                     setIsSearchInputLoading={setIsSearchInputLoading}
                     handleSuggestionItemClick={handleSuggestionItemClick}
                 />
-                <BusyIndicator
-                    active={isSearchInputLoading || isGetLocationLoading}
-                    delay={0}
-                    size="Large"
-                />
             </div>
+            <BusyIndicator
+                active={isSearchInputLoading || isGetLocationLoading}
+                delay={0}
+                size="Large"
+            />
         </FlexBox>
     )
 

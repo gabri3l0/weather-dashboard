@@ -1,13 +1,9 @@
 import {
-    FlexBox,
-    FlexBoxJustifyContent,
-    FlexBoxWrap, Grid,
     Icon,
     Input,
     Modals,
     SuggestionItem
 } from "@ui5/webcomponents-react";
-import {spacing} from "@ui5/webcomponents-react-base";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
