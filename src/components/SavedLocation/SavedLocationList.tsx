@@ -15,13 +15,9 @@ export function SavedLocationList({locations, handleSelectLocationClick, handleR
             wrap={FlexBoxWrap.Wrap}
             style={spacing.sapUiContentPadding}
         >
-            <Card
-                style={{height: "30.5rem"}}
-            >
+            <Card style={{height: "30.5rem"}}>
                 {locations.length > 0 ? (
-                    <List
-                        headerText="Saved Location List"
-                    >
+                    <List headerText="Saved Location List">
                         {locations?.map((location)=> {
                             return (
                                 <SavedLocationItem
@@ -34,7 +30,6 @@ export function SavedLocationList({locations, handleSelectLocationClick, handleR
                         })}
                     </List>
                 ) : <IllustratedMessage  name="NoSavedItems_v1" size="Dialog"/>}
-
             </Card>
         </FlexBox>
     )

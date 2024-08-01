@@ -1,4 +1,11 @@
-import {Button, CustomListItem, FlexBox, FlexBoxAlignItems, Text} from "@ui5/webcomponents-react";
+import {
+    Button,
+    CustomListItem,
+    FlexBox,
+    FlexBoxAlignItems,
+    FlexBoxJustifyContent,
+    Text
+} from "@ui5/webcomponents-react";
 import deleteIcon from '@ui5/webcomponents-icons/dist/delete.js';
 
 
@@ -24,11 +31,9 @@ export function SavedLocationItem({location, handleRemoveLocationClick, handleSe
             data-lon={location.lon}
         >
             <FlexBox
-                justifyContent="SpaceAround"
+                justifyContent={FlexBoxJustifyContent.SpaceAround}
                 alignItems={FlexBoxAlignItems.Center}
-                style={{
-                    width: '100%'
-                }}
+                style={{width: '100%'}}
             >
                 <Text>
                     <img
@@ -37,11 +42,7 @@ export function SavedLocationItem({location, handleRemoveLocationClick, handleSe
                         style={{width: "70%"}}
                     />
                 </Text>
-                <Text
-                    style={{
-                        fontWeight: 'bold'
-                    }}
-                >
+                <Text style={{fontWeight: 'bold'}}>
                     {location.cityName}, {location.countryCode}
                 </Text>
                 <Text style={{fontWeight: 'bold'}}>

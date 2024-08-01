@@ -1,6 +1,6 @@
 import {
     BusyIndicator,
-    FlexBox,
+    FlexBox, FlexBoxAlignItems,
     FlexBoxJustifyContent,
     FlexBoxWrap
 } from "@ui5/webcomponents-react";
@@ -18,7 +18,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
         <FlexBox
             justifyContent={FlexBoxJustifyContent.Center}
             wrap={FlexBoxWrap.Wrap}
-            alignItems="Center"
+            alignItems={FlexBoxAlignItems.Center}
             style={spacing.sapUiContentPadding}
         >
             <div data-layout-indent='XL0 L0 M0 S0' data-layout-span='XL12 L12 M12 S12'>
@@ -35,11 +35,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                     handleSuggestionItemClick={handleSuggestionItemClick}
                 />
             </div>
-            <BusyIndicator
-                active={isSearchInputLoading || isGetLocationLoading}
-                delay={0}
-                size="Large"
-            />
+            <BusyIndicator active={isSearchInputLoading || isGetLocationLoading} delay={0} size="Large"/>
         </FlexBox>
     )
 
