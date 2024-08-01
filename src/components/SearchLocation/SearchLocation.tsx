@@ -25,7 +25,8 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
     const showToast = Modals.useShowToast();
     const [cityToSearch, setCityToSearch] = useState('')
     const [devicePosition, setDevicePosition] = useState<devicePositionType>()
-    const [isLoading, setIsLoading] = useState(false)
+    const [isSearchInputLoading, setIsSearchInputLoading] = useState(false)
+    const [isGetLocationLoading, setIsGetLocationLoading] = useState(false)
 
     const getCity = async () => {
         if (!devicePosition?.lon) return []
@@ -48,7 +49,6 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
         queryFn: ()=>getCity(),
         staleTime: 0,
         retry: false,
-        // gcTime: 0,
         enabled: false
     });
 
@@ -74,7 +74,6 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
         queryFn: ()=>findCities(cityToSearch),
         staleTime: 0,
         retry: false,
-        // gcTime: 0,
         enabled: false
     })
 
@@ -82,6 +81,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
 
 
     const handleGetLocation = () => {
+        setIsGetLocationLoading(true)
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -91,12 +91,14 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                     })
                 },
                 (error) => {
+                    setIsGetLocationLoading(true)
                     showToast({
                         children: error.message
                     })
                 }
             );
         } else {
+            setIsGetLocationLoading(false)
             showToast({
                 children: 'Geolocation is not supported by this browser.'
             })
@@ -112,6 +114,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                 cityName: city[0].name,
                 cityId: city[0].lat.toString()+city[0].lon.toString(),
             })
+            setIsGetLocationLoading(false)
             setDevicePosition(undefined)
         }
     }, [city])
@@ -124,16 +127,16 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
 
     useEffect(()=> {
         if (responseFindCities.error)
-            setIsLoading(false)
+            setIsSearchInputLoading(false)
 
         if(isDataFetched) {
-            setIsLoading(false)
+            setIsSearchInputLoading(false)
         }
     }, [responseFindCities.isPending, responseFindCities.data, responseFindCities.error])
 
     const onSubmit = async () => {
         if (!isDataFetched)
-            setIsLoading(true)
+            setIsSearchInputLoading(true)
         await responseFindCities.refetch()
     }
 
@@ -153,6 +156,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                     <Button
                         icon={locateMeIcon}
                         onClick={handleGetLocation}
+                        disabled={isSearchInputLoading}
                     />
                     <Input
                         type="Text"
@@ -183,7 +187,7 @@ export function SearchLocation({handleSuggestionItemClick}: {handleSuggestionIte
                         })}
                     </Input>
                     <BusyIndicator
-                        active={isLoading}
+                        active={isSearchInputLoading || isGetLocationLoading}
                         delay={0}
                         size="Large"
                     />
