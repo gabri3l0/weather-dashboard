@@ -9,6 +9,8 @@
     ```bash
     npm run dev
     ```
+## API Key Issue
+If you encounter any issues with the API, please notify me so that I can provide a new API key or troubleshoot the problem.
 
 ## Project Overview
 Developed a weather dashboard using React and UI5 Web Components. The application provides features for searching, displaying current and forecasted weather, and managing saved locations.
